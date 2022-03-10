@@ -3,13 +3,15 @@
 
 ## TODO
 * 云账户  
-    - [x] Github
-    - [x] Github Enterprise
-    - [x] Gitlab
-    - [x] Gitlab CE/EE
-    - [x] 腾讯云 Coding
-    - [x] Bitbucket
-    - [x] Bitbucket Server
+    - [ ] Github
+    - [ ] Github Enterprise
+    - [ ] Gitee
+    - [ ] Gitlab
+    - [ ] Gitlab CE/EE
+    - [ ] 腾讯云 Coding
+    - [ ] Bitbucket
+    - [ ] Bitbucket Server
 
 * 基础功能
-    - [ ] git二进制程序的自动查找与配置
+    - [x] git二进制程序的自动查找与配置
+    
