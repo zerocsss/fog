@@ -15,9 +15,11 @@ const ch = {
       },
       setting: {
         git_binary_label_text: 'git',
+        git_binary_min_version_tooltip: 'git 版本必须大于等于 2.1.0',
         git_binary_placeholder_text: '请选择git 二进制文件地址',
         git_binary_button_text: '手动选择',
         default_folder_label_text: '默认目录',
+        default_folder_placeholder_text: '请选择默认目录',
       }
     },
     bottom: {
