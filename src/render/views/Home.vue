@@ -3,11 +3,9 @@
     <lver-layout style="height: 100%">
       <lver-layout-sider style="width:280px; height: 100%;">
         <div class="move-window-content"></div>
-        <explore></explore>
       </lver-layout-sider>
       <lver-layout-content class="lver-layout-content">
         <div class="move-window-content"></div>
-        <editor v-if="!isSettingView"></editor>
         <setting v-if="isSettingView"></setting>
       </lver-layout-content>
     </lver-layout>
@@ -16,10 +14,8 @@
 
 <script setup lang="ts">
 import { ref, onMounted, computed } from "vue";
-import Explore from "./Explore.vue";
 import { useStore } from "../store";
 import Setting from "./Setting.vue"
-import Editor from "./Editor.vue"
 import { switchTheme } from "../utils/theme";
 import i18n from "../locale";
 import { electronStore } from "../utils/electronStore";

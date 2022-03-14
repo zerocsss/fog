@@ -11,15 +11,11 @@ import { router } from "./route"
 import "./style/init.css"
 
 import { store, key } from "./store"
-import { logRuleManager } from './utils/logRuleManager';
-import { log4JSBasic } from './model/iLogRule';
-
-logRuleManager.registerLogRule(log4JSBasic)
 
 const app = createApp(App)
 
 app.use(ArcoVue, {
-  componentPrefix: 'lver'
+  componentPrefix: 'fog'
 })
 app.use(ArcoVueIcon)
 app.use(store, key)

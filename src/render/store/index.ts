@@ -2,9 +2,6 @@ import { InjectionKey } from "vue"
 import { createStore, useStore as baseUseStore, Store } from "vuex"
 import { IState } from "./type"
 import appearance from "./appearance"
-import editorView from "./editorView"
-import user from "./user"
-import logView from "./log"
 import shortcut from "./shortcut"
 
 const key: InjectionKey<Store<IState>> = Symbol()
@@ -12,9 +9,6 @@ const key: InjectionKey<Store<IState>> = Symbol()
 const store = createStore<IState>({
   modules: {
     appearance,
-    editorView,
-    logView,
-    user,
     shortcut
   }
 })

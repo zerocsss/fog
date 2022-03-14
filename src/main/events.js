@@ -1,5 +1,6 @@
 const { ipcMain, app, dialog } = require("electron")
 const { windowsManager } = require("./windowsManager")
+const { searchLocalGitBinary, getGitVersionByBinary } = require("./git")
 const fs = require("fs")
 
 const EventName = {
@@ -26,6 +27,11 @@ const EventName = {
    * 打开右键菜单
    */
   ShowContextMenu: "show-context-menu",
+
+  /**
+   * 搜索本地git二进制文件
+   */
+  SearchLocalGitBinary: "search-local-git-binary",
 }
 
 // 透明度改变
@@ -67,4 +73,14 @@ ipcMain.on(EventName.ShowContextMenu, (_, arg) => {
     x: arg.x,
     y: arg.y
   })
+})
+
+ipcMain.on(EventName.SearchLocalGitBinary, (e, arg) => {
+  let result = null;
+  const localGitBinary = searchLocalGitBinary()
+  if (localGitBinary) {
+    const gitVersion = getGitVersionByBinary(localGitBinary)
+    result = localGitBinary + "(" + gitVersion + ")"
+  }
+  e.returnValue = result
 })

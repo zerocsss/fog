@@ -34,12 +34,13 @@ app.setAboutPanelOptions({
 
 var tray = null
 let mainWin = null
+let welcomeWin = null
 
 function creatWindow() {
   mainWin = new BrowserWindow({
     width: 1920,
     height: 1080,
-    title: 'lver',
+    title: app.getName(),
     resizable: true,
     movable: true,
     icon: path.join(__dirname, '..', 'build', 'icons', 'icon.png'),
@@ -48,7 +49,6 @@ function creatWindow() {
     vibrancy: 'light',
     visualEffectState: "active",
     transparent: true,
-    resizable: true,
     opacity: store.get('windowOpacity' || 0.9),
     webPreferences: {
       webSecurity: false,
@@ -66,10 +66,39 @@ function creatWindow() {
   windowsManager.setMainWindow(mainWin)
 }
 
+function createWelcoleWindow() {
+  welcomeWin = new BrowserWindow({
+    width: 800,
+    height: 600,
+    title: 'Welcome to fog',
+    resizable: false,
+    movable: true,
+    icon: path.join(__dirname, '..', 'build', 'icons', 'icon.png'),
+    frame: process.platform === "win32",
+    titleBarStyle: process.platform === "win32" ? "default" : "hidden",
+    vibrancy: 'light',
+    visualEffectState: "active",
+    transparent: true,
+    opacity: store.get('windowOpacity' || 0.9),
+    webPreferences: {
+      webSecurity: false,
+      nodeIntegration: true,
+      contextIsolation: false,
+      devTools: true
+    }
+  })
+
+  welcomeWin.loadURL("http://localhost:3000")
+
+  welcomeWin.webContents.openDevTools()
+
+  windowsManager.addWindow(welcomeWin)
+}
+
 app.whenReady().then(() => {
   tray = initTary()
   app.setAsDefaultProtocolClient('lver', process.execPath, [`${__dirname}`])
-  creatWindow()
-  win.setTouchBar(touchBar)
-  Menu.setApplicationMenu(createAppMenu(store.get("language", "en"), win, store.get('shortcutList', defaultShortcuts)))
+  createWelcoleWindow()
+  windowsManager.getMainWindow()?.setTouchBar(touchBar)
+  // Menu.setApplicationMenu(createAppMenu(store.get("language", "en"), windowsManager.getMainWindow(), store.get('shortcutList', defaultShortcuts)))
 })

@@ -1,21 +1,21 @@
 {
-  "name": "lver",
+  "name": "fog",
   "version": "1.0.0",
-  "description": "A highly customized log viewer",
+  "description": "A git client",
   "author": "xie Yuan <17010289943@163.com> (https://gitpress.io/@amber)",
   "keywords": [
     "electron",
     "vue",
-    "log"
+    "git"
   ],
-  "homepage": "https://github.com/XieYuanCode/lver",
+  "homepage": "https://github.com/XieYuanCode/fog",
   "bugs": {
-    "url": "https://github.com/XieYuanCode/lver/issues",
+    "url": "https://github.com/XieYuanCode/fog/issues",
     "email": "17010289943@163.com"
   },
   "build": {
-    "productName": "lver",
-    "appId": "com.xieyuan.lver",
+    "productName": "fog",
+    "appId": "com.xieyuan.fog",
     "asar": false,
     "mac": {
       "icon": "build/icons/icon.png"
@@ -24,7 +24,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "github:XieYuanCode/lver"
+    "url": "github:XieYuanCode/fog"
   },
   "main": "src/main/main.js",
   "scripts": {

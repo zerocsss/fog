@@ -1,312 +1,178 @@
 <template>
   <div class="welcome">
-    <lver-layout style="height: 100%;">
-      <lver-layout-header>
-        <lver-steps :current="currentStep" >
-          <lver-step>{{ $t("view.welcome.steper.welcome_step_label_text") }}</lver-step>
-          <lver-step>{{ $t("view.welcome.steper.setting_step_label_text") }}</lver-step>
-          <lver-step>{{ $t("view.welcome.steper.login_step_label_text") }}</lver-step>
-          <lver-step>{{ $t("view.welcome.steper.finish_step_label_text") }}</lver-step>
-        </lver-steps>
-      </lver-layout-header>
-      <lver-layout-content>
+    <fog-layout style="height: 100%;">
+      <fog-layout-header>
+        <fog-steps :current="currentStep" small changeable @change="changeCurrentStep">
+          <fog-step>
+            {{ $t("welcome.header.welcome_step_label_text") }}
+            <template #icon>
+              <icon-home />
+            </template>
+          </fog-step>
+          <fog-step>
+            {{ $t("welcome.header.setting_step_label_text") }}
+            <template #icon>
+              <icon-settings />
+            </template>
+          </fog-step>
+          <fog-step>
+            {{ $t("welcome.header.cloud_step_label_text") }}
+            <template #icon>
+              <icon-cloud />
+            </template>
+          </fog-step>
+          <fog-step>
+            {{ $t("welcome.header.finish_step_label_text") }}
+            <template #icon>
+              <icon-home />
+            </template>
+          </fog-step>
+        </fog-steps>
+      </fog-layout-header>
+      <fog-layout-content>
         <div class="welcome-content" v-if="currentStep === 1">
           <div class="welcome-content-hearde">
             <img src="src/render/assets/icon.png" class="fog-logo" />
             <div>
               <h1>Fog</h1>
-              <h2>{{ $t("view.welcome.welcome_page.description_1") }}</h2>
+              <h2>{{ $t("welcome.content.welcome.description_1") }}</h2>
               <ul>
                 <li>
-                  <h3>{{ $t("view.welcome.welcome_page.description_2") }}</h3>
+                  <h3>{{ $t("welcome.content.welcome.description_2") }}</h3>
                 </li>
                 <li>
-                  <h3>{{ $t("view.welcome.welcome_page.description_3") }}</h3>
+                  <h3>{{ $t("welcome.content.welcome.description_3") }}</h3>
                 </li>
                 <li>
-                  <h3>{{ $t("view.welcome.welcome_page.description_4") }}</h3>
+                  <h3>{{ $t("welcome.content.welcome.description_4") }}</h3>
                 </li>
               </ul>
             </div>
           </div>
         </div>
         <div class="setting-content" v-if="currentStep === 2">
-          <div>
-            {{ $t('view.setting.general.open_on_login_label_text') }}
-            <lver-switch
-              size="small"
-              v-model="openOnLogin"
-              @change="openOnLoginChanged"
-              :style="{ marginLeft: '10px' }"
-            ></lver-switch>
-          </div>
-          <div style="margin-top: 20px;">
-            <span style="color: red" v-if="!store.state.appearance.defaultLogFolder">*</span>
-            <lver-button
-              type="text"
-              size="mini"
-              @click="openLogFolderDialog"
-            >{{ store.state.appearance.defaultLogFolder || t('view.setting.general.default_log_folder_label_text') }}</lver-button>
-          </div>
-          <div style="margin-top: 20px;">
-            {{ $t('view.setting.theme.header_text') }}
-            <lver-radio-group type="button" size="mini" @change="themeChanged" v-model="theme">
-              <lver-radio value="Dark">{{ $t('view.setting.theme.theme.dark') }}</lver-radio>
-              <lver-radio value="Light">{{ $t('view.setting.theme.theme.light') }}</lver-radio>
-              <lver-radio value="System">{{ $t('view.setting.theme.theme.system') }}</lver-radio>
-            </lver-radio-group>
-          </div>
-          <div style="margin-top: 20px;">
-            {{ $t('view.setting.general.language_label_text') }}
-            <lver-radio-group
-              type="button"
-              size="mini"
-              @change="languageChanged"
-              v-model="language"
+          <fog-form :style="{ width: '400px' }">
+            <!-- Git 二进制执行程序配置 -->
+            <fog-form-item
+              field="gitBinary"
+              :label="$t('welcome.content.setting.git_binary_label_text')"
             >
-              <lver-radio value="ch">
-                {{
-                  $t("view.setting.general.language.ch")
-                }}
-              </lver-radio>
-              <lver-radio value="en">
-                {{
-                  $t("view.setting.general.language.en")
-                }}
-              </lver-radio>
-              <lver-radio value="jp" disabled>
-                {{
-                  $t("view.setting.general.language.jp")
-                }}
-              </lver-radio>
-              <lver-radio value="kor" disabled>
-                {{
-                  $t("view.setting.general.language.kor")
-                }}
-              </lver-radio>
-            </lver-radio-group>
-          </div>
-        </div>
-        <div class="login-content" v-if="currentStep === 3">
-          <div class="login-box" @click="loginWithGitee" v-if="!store.state.user.logined">
-            <img
-              src="src/render/assets/gitee_logo.png"
-              style="height: 150px; width: 150px; margin-bottom: 30px;"
-            />
-            <lver-link @click="loginWithGitee">{{ $t('view.setting.account.login.gitee') }}</lver-link>
-          </div>
-          <div class="login-box" @click="loginWithGithub" v-if="!store.state.user.logined">
-            <img
-              src="src/render/assets/github_logo.png"
-              style="height: 150px; width: 150px; margin-bottom: 30px"
-            />
-            <lver-link @click="loginWithGithub">{{ $t('view.setting.account.login.github') }}</lver-link>
-          </div>
-          <div class="login-result" v-if="store.state.user.logined">
-            <lver-card
-              hoverable
-              :style="{
-                width: '360px',
-                marginBottom: '20px'
-              }"
-            >
-              <div
-                :style="{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                
-                }"
+              <fog-select
+                :placeholder="$t('welcome.content.setting.git_binary_placeholder_text')"
+                size="mini"
+                v-model="gitBinaryName"
+                @change="changeGitBinary"
               >
-                <span :style="{ display: 'flex', alignItems: 'center', color: '#1D2129' }">
-                  <lver-avatar :style="{ marginRight: '8px' }" :size="28">
-                    <img alt="avatar" :src="store.state.user.avatar || ''" />
-                  </lver-avatar>
-                  <lver-typography-text>{{ store.state.user.name }}</lver-typography-text>
-                  <lver-typography-text>{{ store.state.user.type === LoginType.Gitee ? "(Gitee)" : "(Github)" }}</lver-typography-text>
-                </span>
-                <div>
-                  <lver-link @click="cancelAuth">{{ $t('view.setting.account.cancel_auth_text') }}</lver-link>
-                  <lver-link @click="logout">{{ $t('view.setting.account.logout_text') }}</lver-link>
-                </div>
-              </div>
-            </lver-card>
-          </div>
+                <fog-option
+                  v-for="existGitBinary in existGitBinarys"
+                  size="mini"
+                >{{ existGitBinary }}</fog-option>
+                <template #footer>
+                  <div style="padding: 6px 0; text-align: center;">
+                    <fog-button
+                      size="mini"
+                      style="width: 90%;"
+                    >{{ $t('welcome.content.setting.git_binary_button_text') }}</fog-button>
+                  </div>
+                </template>
+              </fog-select>
+            </fog-form-item>
+            <!-- 默认目录 -->
+            <fog-form-item
+              field="default folder"
+              :label="$t('welcome.content.setting.default_folder_label_text')"
+            >
+            </fog-form-item>
+          </fog-form>
         </div>
+        <div class="welcome-content" v-if="currentStep === 3">Cloud Account</div>
         <div class="finish-content" v-if="currentStep === 4">
-          <lver-result status="success" :title="$t('view.welcome.finish_page.title')">
+          <fog-result status="success" :title="$t('view.welcome.finish_page.title')">
             <template #subtitle>{{ $t('view.welcome.finish_page.subtitle') }}</template>
             <template #extra>
-              <lver-button
+              <fog-button
                 type="primary"
                 size="mini"
                 @click="gotoHomePage"
-              >{{ $t('view.welcome.bottom_button.finish_button_text') }}</lver-button>
+              >{{ $t('view.welcome.bottom_button.finish_button_text') }}</fog-button>
             </template>
-          </lver-result>
+          </fog-result>
         </div>
-      </lver-layout-content>
-      <lver-layout-footer class="welcome-footer">
-        <lver-button type="primary" size="mini" @click="prevStep" :disabled="currentStep < 2">
+      </fog-layout-content>
+      <fog-layout-footer class="welcome-footer">
+        <fog-button type="primary" size="mini" @click="prevStep" :disabled="currentStep < 2">
           <icon-left />
-          {{ $t("view.welcome.bottom_button.prev_button_text") }}
-        </lver-button>
-        <lver-button
+          {{ $t("welcome.bottom.prev_button_text") }}
+        </fog-button>
+        <fog-button
           type="primary"
           size="mini"
-          :disabled="isNextButtonDisabled"
           @click="nextStep"
           :style="{ marginLeft: '20px' }"
           v-if="currentStep < 4"
         >
-          {{ $t("view.welcome.bottom_button.next_button_text") }}
+          {{ $t("welcome.bottom.next_button_text") }}
           <icon-right />
-        </lver-button>
-        <lver-button
+        </fog-button>
+        <fog-button
           v-else
           type="primary"
           size="mini"
           @click="gotoHomePage"
           :style="{ marginLeft: '20px' }"
         >
-          {{ $t("view.welcome.bottom_button.finish_button_text") }}
+          {{ $t("welcome.bottom.finish_button_text") }}
           <icon-right />
-        </lver-button>
-      </lver-layout-footer>
-    </lver-layout>
+        </fog-button>
+      </fog-layout-footer>
+    </fog-layout>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, getCurrentInstance, ref } from 'vue';
+import { ref, reactive, onMounted, computed } from 'vue';
 import { useStore } from "../store"
 import { useI18n } from "vue-i18n"
 import { useRouter } from 'vue-router';
-import { LoginType } from '../store/user';
+import { searchExistGitBinary } from "../utils/git"
 
-
-const { shell, ipcRenderer } = require('electron');
 
 const store = useStore()
 const { t } = useI18n()
 const router = useRouter()
-const internalInstance = getCurrentInstance()
 
-const isNextButtonDisabled = computed(() => {
-  if (currentStep.value === 2) {
-    if (store.state.appearance.defaultLogFolder) {
-      return false
-    } else {
-      return true
-    }
-  }
-})
-
-const currentStep = ref(1)
+const currentStep = ref(2)
 const prevStep = () => currentStep.value--
 const nextStep = () => currentStep.value++
-const isLogging = ref(false)
 
-const themeChanged = (e: string) => { store.commit("switchTheme", e) }
-const languageChanged = (e: string) => { store.commit("switchLanguage", e) }
-const theme = ref(store.state.appearance.theme);
-const language = ref(store.state.appearance.language);
-const openOnLogin = ref(store.state.appearance.openOnLogin)
-const openOnLoginChanged = (e: boolean) => { store.commit("switchOpenOnLogin", e) }
+const gitBinaryName = ref(store.state.appearance.gitBinary.name)
 
-const logout = () => {
-  store.commit('logout')
-  internalInstance && internalInstance.appContext.config.globalProperties.$message.success(t("view.setting.account.logout_success_tip"))
-}
+const existGitBinarys = reactive<string[]>([])
 
-// 取消授权
-const cancelAuth = () => {
-  const cancelAuthUrl = store.state.user.type === LoginType.Github ? "https://github.com/settings/connections/applications/14d1f9d8eaf6722537d1" : "https://gitee.com/oauth/applications/13616/authorized_application"
-  shell.openExternal(cancelAuthUrl)
-  logout()
-}
-
-/**
- * github登陆
- */
-const loginWithGithub = async () => {
-  isLogging.value = true
-  try {
-    shell.openExternal('https://github.com/login/oauth/authorize?client_id=14d1f9d8eaf6722537d1&redirect_uri=http://81.70.22.185:3001/login/github_redirect')
-    const response = await fetch(`http://81.70.22.185:3001/login/github`)
-    const loginResult = await response.json()
-    if (loginResult.error && loginResult.error_description) {
-      internalInstance && internalInstance.appContext.config.globalProperties.$message.error(loginResult.error_description)
-    } else if (loginResult.success) {
-      store.commit('login', {
-        type: LoginType.Github,
-        name: loginResult.login,
-        avatar: loginResult.avatar_url,
-        html_url: loginResult.html_url,
-        bio: loginResult.bio,
-        blog: loginResult.blog,
-      })
-      internalInstance && internalInstance.appContext.config.globalProperties.$message.success(t("view.setting.account.login_success_tip"))
-    } else {
-      internalInstance && internalInstance.appContext.config.globalProperties.$message.error(t("view.setting.account.login_failed_tip"))
-    }
-  } catch (error) {
-    internalInstance && internalInstance.appContext.config.globalProperties.$message.error(t("view.setting.account.login_failed_tip"))
-  } finally {
-    isLogging.value = false
-  }
-}
-
-/**
- * gitee登录
- */
-const loginWithGitee = async () => {
-  isLogging.value = true
-  try {
-    shell.openExternal('https://gitee.com/oauth/authorize?client_id=1592815aa8a6d503cd041d93e6273d16f32664f85507d8b1510e43e875b473f3&redirect_uri=http://81.70.22.185:3001/login/gitee_redirect&response_type=code')
-    const response = await fetch(`http://81.70.22.185:3001/login/gitee`)
-    const loginResult = await response.json()
-    if (loginResult.error && loginResult.error_description) {
-      internalInstance && internalInstance.appContext.config.globalProperties.$message.error(loginResult.error_description)
-    } else if (loginResult.success) {
-      store.commit('login', {
-        type: LoginType.Gitee,
-        name: loginResult.name,
-        avatar: loginResult.avatar_url,
-        html_url: loginResult.html_url,
-        bio: loginResult.bio,
-        blog: loginResult.blog,
-      })
-      internalInstance && internalInstance.appContext.config.globalProperties.$message.success(t("view.setting.account.login_success_tip"))
-    } else {
-      internalInstance && internalInstance.appContext.config.globalProperties.$message.error(t("view.setting.account.login_failed_tip"))
-    }
-  } catch (error) {
-    internalInstance && internalInstance.appContext.config.globalProperties.$message.error(t("view.setting.account.login_failed_tip"))
-  } finally {
-    isLogging.value = false
-  }
-}
+onMounted(() => {
+  existGitBinarys.push(searchExistGitBinary())
+})
 
 const gotoHomePage = () => {
   router.push('/home')
 }
 
-const openLogFolderDialog = () => {
-  const folder = ipcRenderer.sendSync('show-open-dialog', {
-    title: t("view.setting.general.default_log_folder_label_text"),
-  })
-  store.commit('switchDefaultLogFolder', folder[0])
+const changeCurrentStep = (step: number) => {
+  console.log(step);
+  currentStep.value = step
+}
+
+const changeGitBinary = (gitBinary: string) => {
+  store.commit('gitBinaryChanged', gitBinary)
 }
 
 </script>
 
 <style scoped>
-
 .welcome {
   user-select: none;
-  height: calc(100% - 140px);
-  padding: 100px 40px 40px 40px;
+  height: calc(100% - 80px);
+  padding: 40px;
   background-color: var(--color-neutral-2);
   color: var(--color-text-2);
 }
@@ -333,12 +199,13 @@ const openLogFolderDialog = () => {
 }
 
 .setting-content {
-  height: 100%;
+  height: calc(100% - 40px);
   width: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding: 20px 0px 20px 0px;
 }
 
 .welcome-content-hearde {

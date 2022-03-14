@@ -103,21 +103,6 @@
                 </lver-radio>
               </lver-radio-group>
             </lver-form-item>
-            <!-- 大小 -->
-            <lver-form-item field="size" :label="t('view.setting.general.size_label_text')">
-              <lver-radio-group type="button" size="mini" @change="sizeChanged" v-model="size">
-                <lver-radio :value="true">
-                  {{
-                    $t("view.setting.common.show_text")
-                  }}
-                </lver-radio>
-                <lver-radio :value="false">
-                  {{
-                    $t("view.setting.common.hide_text")
-                  }}
-                </lver-radio>
-              </lver-radio-group>
-            </lver-form-item>
           </lver-space>
         </lver-form>
         <lver-divider
@@ -564,7 +549,6 @@ import { ref, computed, getCurrentInstance, h } from "vue";
 import { ThemeType } from "../model/theme";
 import { useStore } from "../store";
 import { useI18n } from "vue-i18n"
-import { LoginType } from "../store/user";
 import { isLinux, isMac, isWin } from "../utils/system";
 import Shortcut from "../components/Shortcut.vue";
 
@@ -576,7 +560,6 @@ const internalInstance = getCurrentInstance()
 
 const language = ref(store.state.appearance.language);
 const theme = ref(store.state.appearance.theme);
-const size = ref(store.state.appearance.size)
 const encoding = ref(store.state.appearance.encoding)
 const endOfLineSequence = ref(store.state.appearance.endOfLineSequence)
 const isLogined = computed(() => store.state.user.logined)
@@ -598,7 +581,6 @@ const lastCheckUpdateTime = computed(() => store.state.appearance.lastCheckUpdat
 
 const themeChanged = (e: string) => { store.commit("switchTheme", e) }
 const languageChanged = (e: string) => { store.commit("switchLanguage", e) };
-const sizeChanged = (e: boolean) => { store.commit("switchSizeVisible", e) };
 const encodingChanged = (e: string) => { store.commit("switchEncoding", e) };
 const endOfLineSequenceChanged = (e: string) => { store.commit("switchEndOfLineSequence", e) }
 const logDescriptionChanged = (e: boolean) => { store.commit('switchlogDescription', e) }
