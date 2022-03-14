@@ -1,4 +1,5 @@
 exports.isMac = process.platform === 'darwin'
+exports.isWin = process.platform === 'win32'
 
 /**
  * 作者名

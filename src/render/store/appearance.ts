@@ -1,8 +1,13 @@
 import { ThemeType } from "../model/theme";
 import { electronStore } from "../utils/electronStore";
 import { switchTheme } from "../utils/theme";
+import i18n from "../locale";
+
+const { ipcRenderer } = require('electron');
+
 export interface IAppearanceState {
-  theme: Theme;
+  language: string;
+  theme: ThemeType;
   gitBinary: string;
   defaultFolder: string;
 }
@@ -12,7 +17,8 @@ const appearance = {
     return {
       theme: electronStore.store.get("theme", ThemeType.System),
       gitBinary: electronStore.store.get("gitBinary"),
-      defaultFolder: electronStore.store.get("defaultFolder"),
+      defaultFolder: electronStore.store.get("defaultFolder", ipcRenderer.sendSync("get-path", { name: 'home' })),
+      language: electronStore.store.get("language", "en"),
     }
   },
   mutations: {
@@ -28,6 +34,11 @@ const appearance = {
     defaultFolderChanged(state: IAppearanceState, defaultFolder: string) {
       state.defaultFolder = defaultFolder;
       electronStore.store.set("defaultFolder", defaultFolder);
+    },
+    languageChanged(state: IAppearanceState, language: string) {
+      state.language = language;
+      i18n.global.locale = language as 'en' | 'ch' | 'jp' | 'kor'
+      electronStore.store.set("language", language);
     }
   }
 }

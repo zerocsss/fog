@@ -1,6 +1,6 @@
 const { ipcMain, app, dialog } = require("electron")
 const { windowsManager } = require("./windowsManager")
-const { searchLocalGitBinary, getGitVersionByBinary } = require("./git")
+const { searchLocalGitBinary, getGitVersionByBinary, getGigGlobalConfig, setGitGlobalConfig } = require("./git")
 const fs = require("fs")
 
 const EventName = {
@@ -32,6 +32,21 @@ const EventName = {
    * 搜索本地git二进制文件
    */
   SearchLocalGitBinary: "search-local-git-binary",
+
+  /**
+   * 获取app各种路径
+   */
+  GetPath: "get-path",
+
+  /**
+   * 获取Git全局配置
+   */
+  GetGitGlobalConfig: "get-git-global-config",
+
+  /**
+   * 设置Git全局配置
+   */
+  SetGitGlobalConfig: "set-git-global-config",
 }
 
 // 透明度改变
@@ -83,4 +98,17 @@ ipcMain.on(EventName.SearchLocalGitBinary, (e, arg) => {
     result = localGitBinary + "(" + gitVersion + ")"
   }
   e.returnValue = result
+})
+
+ipcMain.on(EventName.GetPath, (e, arg) => {
+  e.returnValue = app.getPath(arg.name)
+})
+
+ipcMain.on(EventName.GetGitGlobalConfig, (e, arg) => {
+  e.returnValue = getGigGlobalConfig(arg.binary)
+})
+
+
+ipcMain.on(EventName.SetGitGlobalConfig, (e, arg) => {
+  setGitGlobalConfig(arg.binary, arg.key, arg.value)
 })

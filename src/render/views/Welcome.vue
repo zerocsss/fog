@@ -68,6 +68,17 @@
                 :label-col-props="{ span: 8, offset: 0 }"
                 :wrapper-col-props="{ span: 16, offset: 0 }"
               >
+                <!-- 默认clone位置 -->
+                <fog-form-item
+                  field="default folder"
+                  :label="$t('welcome.content.setting.general.default_folder_label_text')"
+                >
+                  <fog-button
+                    type="text"
+                    size="mini"
+                    @click="openLogFolderDialog"
+                  >{{ store.state.appearance.defaultFolder || t('welcome.content.setting.general.default_folder_placeholder_text') }}</fog-button>
+                </fog-form-item>
                 <!-- 主题 -->
                 <fog-form-item
                   field="theme"
@@ -81,13 +92,47 @@
                   >
                     <fog-option
                       size="mini"
+                      value="Light"
                     >{{ $t('welcome.content.setting.general.theme_selector_option_light') }}</fog-option>
                     <fog-option
                       size="mini"
+                      value="Dark"
                     >{{ $t('welcome.content.setting.general.theme_selector_option_dark') }}</fog-option>
                     <fog-option
                       size="mini"
+                      value="System"
                     >{{ $t('welcome.content.setting.general.theme_selector_option_system') }}</fog-option>
+                  </fog-select>
+                </fog-form-item>
+                <!-- 语言 -->
+                <fog-form-item
+                  field="theme"
+                  :label="$t('welcome.content.setting.general.language_label_text')"
+                >
+                  <fog-select
+                    :placeholder="$t('welcome.content.setting.general.language_selector_placeholder_text')"
+                    v-model="language"
+                    size="mini"
+                    @change="languageChanged"
+                  >
+                    <fog-option
+                      size="mini"
+                      value="ch"
+                    >{{ $t('welcome.content.setting.general.language.ch') }}</fog-option>
+                    <fog-option
+                      size="mini"
+                      value="en"
+                    >{{ $t('welcome.content.setting.general.language.en') }}</fog-option>
+                    <fog-option
+                      size="mini"
+                      value="jp"
+                      disabled
+                    >{{ $t('welcome.content.setting.general.language.jp') }}</fog-option>
+                    <fog-option
+                      size="mini"
+                      value="kor"
+                      disabled
+                    >{{ $t('welcome.content.setting.general.language.kor') }}</fog-option>
                   </fog-select>
                 </fog-form-item>
               </fog-form>
@@ -98,6 +143,7 @@
                 :label-col-props="{ span: 8, offset: 0 }"
                 :wrapper-col-props="{ span: 16, offset: 0 }"
               >
+                <!-- git地址 -->
                 <fog-form-item
                   field="gitBinary"
                   :label="$t('welcome.content.setting.git.git_binary_label_text')"
@@ -122,20 +168,124 @@
                     </template>
                   </fog-select>
                 </fog-form-item>
+                <!-- Git全局信息-name -->
                 <fog-form-item
-                  field="default folder"
-                  :label="$t('welcome.content.setting.git.default_folder_label_text')"
+                  :label="$t('welcome.content.setting.git.git_global_config_label_text')"
+                ></fog-form-item>
+                <fog-form-item
+                  field="git global name"
+                  :label="$t('welcome.content.setting.git.git_global_name_label_text')"
                 >
-                  <fog-button
-                    type="text"
+                  <fog-input
                     size="mini"
-                    @click="openLogFolderDialog"
-                  >{{ store.state.appearance.defaultFolder || t('welcome.content.setting.git.default_folder_placeholder_text') }}</fog-button>
+                    :placeholder="$t('welcome.content.setting.git.git_global_name_placeholder_text')"
+                    v-model="globalName"
+                    @change="globalNameChanged"
+                  />
+                </fog-form-item>
+                <!-- Git全局信息-email -->
+                <fog-form-item
+                  field="git global email"
+                  :label="$t('welcome.content.setting.git.git_global_email_label_text')"
+                >
+                  <fog-input
+                    size="mini"
+                    :placeholder="$t('welcome.content.setting.git.git_global_email_placeholder_text')"
+                    v-model="globalEmail"
+                    @change="globalEmailChanged"
+                  />
                 </fog-form-item>
               </fog-form>
             </div>
             <!-- 账户 -->
-            <div v-if="currentStep === 2 && currentSettingStep === 3">Service Account</div>
+            <div v-if="currentStep === 2 && currentSettingStep === 3" class="account-service">
+              <div class="account-service-title">
+                <div class="account-service-title-pair">
+                  <fog-button size="mini" type="outline">
+                    Github
+                    <template #icon>
+                      <icon-github />
+                    </template>
+                  </fog-button>
+                  <fog-button
+                    size="mini"
+                    type="outline"
+                    class="account-service-title-bottom-button"
+                  >
+                    Github Enterprise
+                    <template #icon>
+                      <icon-github />
+                    </template>
+                  </fog-button>
+                </div>
+                <div class="account-service-title-pair">
+                  <fog-button size="mini" type="outline">
+                    Gitlab
+                    <template #icon>
+                      <icon-gitlab />
+                    </template>
+                  </fog-button>
+                  <fog-button
+                    size="mini"
+                    type="outline"
+                    class="account-service-title-bottom-button"
+                  >
+                    Gitlab CE/EE
+                    <template #icon>
+                      <icon-gitlab />
+                    </template>
+                  </fog-button>
+                </div>
+                <div class="account-service-title-pair">
+                  <fog-button size="mini" type="outline">Gitee</fog-button>
+                  <fog-button
+                    size="mini"
+                    type="outline"
+                    class="account-service-title-bottom-button"
+                  >Conding</fog-button>
+                </div>
+                <div class="account-service-title-pair">
+                  <fog-button size="mini" type="outline">Bitbucket</fog-button>
+                  <fog-button
+                    size="mini"
+                    type="outline"
+                    class="account-service-title-bottom-button"
+                  >Bitbucket Server</fog-button>
+                </div>
+              </div>
+              <div class="account-service-list">
+                <fog-list size="small" max-height="240" class="account-service-list-main">
+                  <fog-list-item>
+                    <fog-list-item-meta
+                      title="Beijing Bytedance Technology Co., Ltd."
+                      description="Beijing ByteDance Technology Co., Ltd. is an enterprise located in China."
+                    >
+                      <template #avatar>
+                        <fog-avatar>
+                          <img
+                            src="https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/3ee5f13fb09879ecb5185e440cef6eb9.png~tplv-uwbnlip3yd-webp.webp"
+                          />
+                        </fog-avatar>
+                      </template>
+                    </fog-list-item-meta>
+                  </fog-list-item>
+                  <fog-list-item>
+                    <fog-list-item-meta
+                      title="Beijing Bytedance Technology Co., Ltd."
+                      description="Beijing ByteDance Technology Co., Ltd. is an enterprise located in China."
+                    >
+                      <template #avatar>
+                        <fog-avatar>
+                          <img
+                            src="https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/3ee5f13fb09879ecb5185e440cef6eb9.png~tplv-uwbnlip3yd-webp.webp"
+                          />
+                        </fog-avatar>
+                      </template>
+                    </fog-list-item-meta>
+                  </fog-list-item>
+                </fog-list>
+              </div>
+            </div>
             <!-- 添加本地 -->
             <div v-if="currentStep === 2 && currentSettingStep === 4">Add Repositores</div>
           </div>
@@ -184,11 +334,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, onMounted, computed } from 'vue';
+import { ref, reactive, onMounted } from 'vue';
 import { useStore } from "../store"
 import { useI18n } from "vue-i18n"
 import { useRouter } from 'vue-router';
-import { searchExistGitBinary } from "../utils/git"
+import { searchExistGitBinary, getGlobalGitConfig, setGlobalGitEmail, setGlobalGitName } from "../utils/git"
+import { electronStore } from '../utils/electronStore';
 
 const { ipcRenderer } = require("electron")
 
@@ -196,7 +347,7 @@ const store = useStore()
 const { t } = useI18n()
 const router = useRouter()
 
-const currentStep = ref(2)
+const currentStep = ref(1)
 const currentSettingStep = ref(1)
 const prevStep = () => {
   if (currentStep.value === 2) {
@@ -231,14 +382,28 @@ const nextStep = () => {
 
 const gitBinaryName = ref(store.state.appearance.gitBinary)
 const theme = ref(store.state.appearance.theme);
+const language = ref(store.state.appearance.language);
+const globalName = ref("")
+const globalEmail = ref("")
 
 const existGitBinarys = reactive<string[]>([])
 
 onMounted(() => {
   existGitBinarys.push(searchExistGitBinary())
+  refreshGlobalGitConfig()
 })
 
+const refreshGlobalGitConfig = () => {
+  if (store.state.appearance.gitBinary) {
+    const globalGitConfig = getGlobalGitConfig(store.state.appearance.gitBinary)
+    globalName.value = globalGitConfig['user.name']
+    globalEmail.value = globalGitConfig['user.email']
+  }
+}
+
 const gotoHomePage = () => {
+  electronStore.store.set('isFirstLoad', false)
+  require("electron").ipcRenderer.send("close-welcome-and-open-main")
   router.push('/home')
 }
 
@@ -250,8 +415,12 @@ const changeCurrentSettingStep = (step: number) => {
   currentSettingStep.value = step
 }
 
-const changeGitBinary = (gitBinary: string) => { store.commit('gitBinaryChanged', gitBinary) }
+const changeGitBinary = (gitBinary: string) => {
+  store.commit('gitBinaryChanged', gitBinary)
+  refreshGlobalGitConfig()
+}
 const themeChanged = (e: string) => { store.commit("themeChanged", e) }
+const languageChanged = (e: string) => { store.commit("languageChanged", e) }
 
 const openLogFolderDialog = () => {
   const folder = ipcRenderer.sendSync('show-open-dialog', {
@@ -259,6 +428,9 @@ const openLogFolderDialog = () => {
   })
   folder && store.commit('defaultFolderChanged', folder[0])
 }
+
+const globalNameChanged = (e: string) => { setGlobalGitName(store.state.appearance.gitBinary, e); }
+const globalEmailChanged = (e: string) => { setGlobalGitEmail(store.state.appearance.gitBinary, e); }
 
 
 </script>
@@ -271,6 +443,38 @@ const openLogFolderDialog = () => {
   background-color: var(--color-neutral-2);
   color: var(--color-text-2);
   opacity: 0.9;
+}
+
+.account-service-list {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.account-service-list-main {
+  width: 455px;
+}
+
+.account-service-title-bottom-button {
+  margin-top: 5px;
+}
+
+.account-service-title-pair {
+  display: flex;
+  flex-direction: column;
+  margin-left: 5px;
+}
+
+.account-service-title {
+  display: flex;
+}
+
+.account-service {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .setting-content-stepper {
@@ -294,6 +498,7 @@ const openLogFolderDialog = () => {
   width: 100%;
   position: absolute;
   top: 0;
+  left: 0;
   -webkit-app-region: drag;
 }
 

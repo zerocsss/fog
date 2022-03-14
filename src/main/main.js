@@ -16,7 +16,7 @@ const { windowsManager } = require("./windowsManager")
 // 快捷键
 const { defaultShortcuts } = require("./shortcut")
 // 事件
-require('./events')
+const { EventName } = require('./events')
 
 // 初始化渲染进程的store实例
 initRenderer()
@@ -35,6 +35,14 @@ app.setAboutPanelOptions({
 var tray = null
 let mainWin = null
 let welcomeWin = null
+
+// 这段不知道放哪 就放着算了 懒得改了
+ipcMain.on("close-welcome-and-open-main", () => {
+  welcomeWin.close()
+  windowsManager.removeWindow(welcomeWin)
+
+  creatWindow()
+})
 
 function creatWindow() {
   mainWin = new BrowserWindow({
@@ -93,12 +101,18 @@ function createWelcoleWindow() {
   welcomeWin.webContents.openDevTools()
 
   windowsManager.addWindow(welcomeWin)
+
 }
 
 app.whenReady().then(() => {
   tray = initTary()
   app.setAsDefaultProtocolClient('lver', process.execPath, [`${__dirname}`])
-  createWelcoleWindow()
+  const isFirstLoad = store.get('isFirstLoad', true)
+  if(isFirstLoad) {
+    createWelcoleWindow()
+  } else {
+    creatWindow()
+  }
   windowsManager.getMainWindow()?.setTouchBar(touchBar)
   // Menu.setApplicationMenu(createAppMenu(store.get("language", "en"), windowsManager.getMainWindow(), store.get('shortcutList', defaultShortcuts)))
 })

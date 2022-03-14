@@ -1,6 +1,7 @@
 <template>
   <lver-layout class="layout">
-    <lver-layout style="height: 100%">
+    home
+    <!-- <lver-layout style="height: 100%">
       <lver-layout-sider style="width:280px; height: 100%;">
         <div class="move-window-content"></div>
       </lver-layout-sider>
@@ -8,7 +9,7 @@
         <div class="move-window-content"></div>
         <setting v-if="isSettingView"></setting>
       </lver-layout-content>
-    </lver-layout>
+    </lver-layout> -->
   </lver-layout>
 </template>
 
