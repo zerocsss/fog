@@ -1,7 +1,7 @@
 <template>
   <div class="welcome">
     <div class="move-window-content"></div>
-    <fog-spin :loading="isLoading" :size="32">
+    <!-- <fog-spin :loading="isLoading"> -->
       <fog-layout style="height: 100%;">
         <fog-layout-header>
           <fog-steps
@@ -363,7 +363,7 @@
           </fog-button>
         </fog-layout-footer>
       </fog-layout>
-    </fog-spin>
+    <!-- </fog-spin> -->
   </div>
 </template>
 
@@ -426,7 +426,9 @@ const existGitBinarys = reactive<string[]>([])
 
 const isNextStepDisabled = computed(() => {
   if (currentStep.value === 2 && currentSettingStep.value === 1) {
-    return !!gitBinaryName.value
+    return !gitBinaryName.value
+  } else {
+    return false
   }
 })
 
