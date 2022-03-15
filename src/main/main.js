@@ -46,6 +46,7 @@ ipcMain.on("close-welcome-and-open-main", () => {
 
 ipcMain.on('add-service-Account', (e, arg) => {
   const addServiceAccountWin = createAddServiceAccountWindow(arg.type)
+  addServiceAccountWin.setAlwaysOnTop(true, 'floating')
   addServiceAccountWin.on('close', () => {
     e.returnValue = ''
   })

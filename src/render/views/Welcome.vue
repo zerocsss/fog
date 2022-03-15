@@ -1,7 +1,8 @@
 <template>
   <div class="welcome">
     <div class="move-window-content"></div>
-    <!-- <fog-spin :loading="isLoading"> -->
+    {{ isLoading }}
+    <fog-spin :loading="isLoading" style="width: 100%; height: 100%;">
       <fog-layout style="height: 100%;">
         <fog-layout-header>
           <fog-steps
@@ -285,36 +286,26 @@
                   </div>
                 </div>
                 <div class="account-service-list">
-                  <fog-list size="small" max-height="240" class="account-service-list-main">
-                    <fog-list-item>
+                  <fog-list
+                    size="small"
+                    max-height="240"
+                    class="account-service-list-main"
+                    v-if="serviceAccounts && serviceAccounts.length > 0"
+                  >
+                    <fog-list-item v-for="serviceAccount in serviceAccounts">
                       <fog-list-item-meta
-                        title="Beijing Bytedance Technology Co., Ltd."
+                        :title="serviceAccount.name"
                         description="Beijing ByteDance Technology Co., Ltd. is an enterprise located in China."
                       >
                         <template #avatar>
                           <fog-avatar>
-                            <img
-                              src="https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/3ee5f13fb09879ecb5185e440cef6eb9.png~tplv-uwbnlip3yd-webp.webp"
-                            />
-                          </fog-avatar>
-                        </template>
-                      </fog-list-item-meta>
-                    </fog-list-item>
-                    <fog-list-item>
-                      <fog-list-item-meta
-                        title="Beijing Bytedance Technology Co., Ltd."
-                        description="Beijing ByteDance Technology Co., Ltd. is an enterprise located in China."
-                      >
-                        <template #avatar>
-                          <fog-avatar>
-                            <img
-                              src="https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/3ee5f13fb09879ecb5185e440cef6eb9.png~tplv-uwbnlip3yd-webp.webp"
-                            />
+                            <img :src="serviceAccount.avatar" />
                           </fog-avatar>
                         </template>
                       </fog-list-item-meta>
                     </fog-list-item>
                   </fog-list>
+                  <fog-empty v-else />
                 </div>
               </div>
               <!-- 添加本地 -->
@@ -363,7 +354,7 @@
           </fog-button>
         </fog-layout-footer>
       </fog-layout>
-    <!-- </fog-spin> -->
+    </fog-spin>
   </div>
 </template>
 
@@ -382,8 +373,8 @@ const store = useStore()
 const { t } = useI18n()
 const router = useRouter()
 
-const currentStep = ref(1)
-const currentSettingStep = ref(1)
+const currentStep = ref(2)
+const currentSettingStep = ref(3)
 const isLoading = ref(false)
 const prevStep = () => {
   if (currentStep.value === 2) {
@@ -415,7 +406,7 @@ const nextStep = () => {
     }
   }
 }
-
+const serviceAccounts = computed(() => store.state.serviceAccount.serviceAccounts)
 const gitBinaryName = ref(store.state.appearance.gitBinary)
 const theme = ref(store.state.appearance.theme);
 const language = ref(store.state.appearance.language);
@@ -455,13 +446,9 @@ const gotoHomePage = () => {
   router.push('/home')
 }
 
-const changeCurrentStep = (step: number) => {
-  currentStep.value = step
-}
+const changeCurrentStep = (step: number) => { currentStep.value = step }
 
-const changeCurrentSettingStep = (step: number) => {
-  currentSettingStep.value = step
-}
+const changeCurrentSettingStep = (step: number) => { currentSettingStep.value = step }
 
 const changeGitBinary = (gitBinary: string) => {
   store.commit('gitBinaryChanged', gitBinary)
@@ -484,7 +471,7 @@ const addServiceAccount = (serviceAccountType: ServiceAccountType) => {
   console.log('设置loading=true');
   isLoading.value = true
   console.log('打开窗口');
-  const _ =ipcRenderer.sendSync('add-service-Account', {
+  const _ = ipcRenderer.sendSync('add-service-Account', {
     type: serviceAccountType,
   })
   console.log('窗口关闭，设置loading=false');
@@ -508,6 +495,8 @@ const addServiceAccount = (serviceAccountType: ServiceAccountType) => {
   display: flex;
   justify-content: center;
   align-items: center;
+  border-top: 1px solid var(--color-border-2);
+  padding-top: 20px;
 }
 
 .account-service-list-main {
@@ -526,6 +515,7 @@ const addServiceAccount = (serviceAccountType: ServiceAccountType) => {
 
 .account-service-title {
   display: flex;
+  margin-top: 20px;
 }
 
 .account-service {
@@ -533,6 +523,7 @@ const addServiceAccount = (serviceAccountType: ServiceAccountType) => {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  margin-top: 20px;
 }
 
 .setting-content-stepper {

@@ -40,6 +40,16 @@ export interface IServiceAccount {
    * 地址
    */
   host: string
+
+  /**
+   * 用户名
+   */
+  name: string
+
+  /**
+   * 头像
+   */
+  avatar: string
 }
 
 /**
