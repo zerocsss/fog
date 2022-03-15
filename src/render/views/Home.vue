@@ -1,5 +1,5 @@
 <template>
-  <lver-layout class="layout">
+  <fog-layout class="layout">
      This Is Home Page
     <!-- <lver-layout style="height: 100%">
       <lver-layout-sider style="width:280px; height: 100%;">
@@ -10,7 +10,7 @@
         <setting v-if="isSettingView"></setting>
       </lver-layout-content>
     </lver-layout> -->
-  </lver-layout>
+  </fog-layout>
 </template>
 
 <script setup lang="ts">

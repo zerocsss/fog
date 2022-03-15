@@ -35,6 +35,7 @@ app.setAboutPanelOptions({
 var tray = null
 let mainWin = null
 let welcomeWin = null
+let addServiceAccountWin = null
 
 // 这段不知道放哪 就放着算了 懒得改了
 ipcMain.on("close-welcome-and-open-main", () => {
@@ -45,10 +46,15 @@ ipcMain.on("close-welcome-and-open-main", () => {
 })
 
 ipcMain.on('add-service-Account', (e, arg) => {
-  const addServiceAccountWin = createAddServiceAccountWindow(arg.type)
+  createAddServiceAccountWindow(arg.type)
   addServiceAccountWin.setAlwaysOnTop(true, 'floating')
-  addServiceAccountWin.on('close', () => {
-    e.returnValue = ''
+  ipcMain.on("add-service-account-successed", (_, userInfo) => {
+    e.returnValue = userInfo
+    addServiceAccountWin.close()
+  })
+  ipcMain.on("add-service-account-canceled", () => {
+    e.returnValue = null
+    addServiceAccountWin.close()
   })
 })
 
@@ -86,7 +92,7 @@ function createWelcoleWindow() {
   welcomeWin = new BrowserWindow({
     width: 800,
     height: 600,
-    title: 'Welcome to fog',
+    title: 'Welcome To Fog',
     resizable: false,
     movable: true,
     icon: path.join(__dirname, '..', 'build', 'icons', 'icon.png'),
@@ -109,23 +115,21 @@ function createWelcoleWindow() {
   welcomeWin.webContents.openDevTools()
 
   windowsManager.addWindow(welcomeWin)
-
 }
 
 function createAddServiceAccountWindow(type) {
   addServiceAccountWin = new BrowserWindow({
+    parent: welcomeWin,
+    modal: true,
     width: 400,
     height: 300,
-    title: 'Welcome to fog',
+    title: 'Add Service Account',
     resizable: false,
-    movable: true,
+    movable: false,
     icon: path.join(__dirname, '..', 'build', 'icons', 'icon.png'),
     frame: process.platform === "win32",
     titleBarStyle: process.platform === "win32" ? "default" : "hidden",
-    vibrancy: 'light',
-    visualEffectState: "active",
     transparent: true,
-    opacity: store.get('windowOpacity' || 0.9),
     webPreferences: {
       webSecurity: false,
       nodeIntegration: true,
@@ -135,11 +139,8 @@ function createAddServiceAccountWindow(type) {
   })
 
   addServiceAccountWin.loadURL(`http://localhost:3000/#/addServiceAccount/${type}`)
-  addServiceAccountWin.webContents.openDevTools()
 
-  windowsManager.addWindow(addServiceAccountWin)
-
-  return addServiceAccountWin
+  addServiceAccountWin.openDevTools()
 }
 
 app.whenReady().then(() => {

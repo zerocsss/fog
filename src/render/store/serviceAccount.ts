@@ -65,7 +65,12 @@ const serviceAccount = {
       serviceAccounts: [],
     }
   },
-  mutations: {}
+  mutations: {
+    addServiceAccounts(state: IServiceAccountState, serviceAccount: IServiceAccount) {
+      state.serviceAccounts.push(serviceAccount)
+      console.log('asdasdasd', state.serviceAccounts);
+    }
+  }
 }
 
 export default serviceAccount

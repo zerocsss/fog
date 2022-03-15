@@ -1,360 +1,348 @@
 <template>
   <div class="welcome">
     <div class="move-window-content"></div>
-    {{ isLoading }}
-    <fog-spin :loading="isLoading" style="width: 100%; height: 100%;">
-      <fog-layout style="height: 100%;">
-        <fog-layout-header>
+    <fog-layout style="height: 100%;">
+      <fog-layout-header>
+        <fog-steps :current="currentStep" small changeable @change="changeCurrentStep" type="arrow">
+          <fog-step>
+            {{ $t("welcome.header.welcome_step_label_text") }}
+            <template #icon>
+              <icon-home />
+            </template>
+          </fog-step>
+          <fog-step>
+            {{ $t("welcome.header.setting_step_label_text") }}
+            <template #icon>
+              <icon-settings />
+            </template>
+          </fog-step>
+          <fog-step>
+            {{ $t("welcome.header.finish_step_label_text") }}
+            <template #icon>
+              <icon-home />
+            </template>
+          </fog-step>
+        </fog-steps>
+      </fog-layout-header>
+      <fog-layout-content>
+        <!-- 欢迎 -->
+        <div class="welcome-content" v-if="currentStep === 1">
+          <div class="welcome-content-hearde">
+            <img src="src/render/assets/icon.png" class="fog-logo" />
+            <div>
+              <h1>Fog</h1>
+              <h2>{{ $t("welcome.content.welcome.description_1") }}</h2>
+              <ul>
+                <li>
+                  <h3>{{ $t("welcome.content.welcome.description_2") }}</h3>
+                </li>
+                <li>
+                  <h3>{{ $t("welcome.content.welcome.description_3") }}</h3>
+                </li>
+                <li>
+                  <h3>{{ $t("welcome.content.welcome.description_4") }}</h3>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <!-- 设置 -->
+        <div class="setting-content" v-if="currentStep === 2">
           <fog-steps
-            :current="currentStep"
+            :current="currentSettingStep"
+            direction="vertical"
             small
             changeable
-            @change="changeCurrentStep"
-            type="arrow"
+            class="setting-content-stepper"
+            @change="changeCurrentSettingStep"
           >
-            <fog-step>
-              {{ $t("welcome.header.welcome_step_label_text") }}
-              <template #icon>
-                <icon-home />
-              </template>
-            </fog-step>
-            <fog-step>
-              {{ $t("welcome.header.setting_step_label_text") }}
-              <template #icon>
-                <icon-settings />
-              </template>
-            </fog-step>
-            <fog-step>
-              {{ $t("welcome.header.finish_step_label_text") }}
-              <template #icon>
-                <icon-home />
-              </template>
-            </fog-step>
+            <fog-step>{{ $t('welcome.content.setting.general.stepper_label_text') }}</fog-step>
+            <fog-step>{{ $t('welcome.content.setting.git.stepper_label_text') }}</fog-step>
+            <fog-step>{{ $t('welcome.content.setting.service.stepper_label_text') }}</fog-step>
+            <fog-step>{{ $t('welcome.content.setting.addRepositores.stepper_label_text') }}</fog-step>
           </fog-steps>
-        </fog-layout-header>
-        <fog-layout-content>
-          <!-- 欢迎 -->
-          <div class="welcome-content" v-if="currentStep === 1">
-            <div class="welcome-content-hearde">
-              <img src="src/render/assets/icon.png" class="fog-logo" />
-              <div>
-                <h1>Fog</h1>
-                <h2>{{ $t("welcome.content.welcome.description_1") }}</h2>
-                <ul>
-                  <li>
-                    <h3>{{ $t("welcome.content.welcome.description_2") }}</h3>
-                  </li>
-                  <li>
-                    <h3>{{ $t("welcome.content.welcome.description_3") }}</h3>
-                  </li>
-                  <li>
-                    <h3>{{ $t("welcome.content.welcome.description_4") }}</h3>
-                  </li>
-                </ul>
-              </div>
+          <div class="setting-content-content">
+            <!-- 通用 -->
+            <div v-if="currentStep === 2 && currentSettingStep === 1">
+              <fog-form
+                :label-col-props="{ span: 8, offset: 0 }"
+                :wrapper-col-props="{ span: 16, offset: 0 }"
+              >
+                <!-- 默认clone位置 -->
+                <fog-form-item
+                  field="default folder"
+                  :label="$t('welcome.content.setting.general.default_folder_label_text')"
+                >
+                  <fog-button
+                    type="text"
+                    size="mini"
+                    @click="openLogFolderDialog"
+                  >{{ store.state.appearance.defaultFolder || t('welcome.content.setting.general.default_folder_placeholder_text') }}</fog-button>
+                </fog-form-item>
+                <!-- 主题 -->
+                <fog-form-item
+                  field="theme"
+                  :label="$t('welcome.content.setting.general.theme_label_text')"
+                >
+                  <fog-select
+                    :placeholder="$t('welcome.content.setting.general.theme_placeholder_text')"
+                    v-model="theme"
+                    size="mini"
+                    @change="themeChanged"
+                  >
+                    <fog-option
+                      size="mini"
+                      value="Light"
+                    >{{ $t('welcome.content.setting.general.theme_selector_option_light') }}</fog-option>
+                    <fog-option
+                      size="mini"
+                      value="Dark"
+                    >{{ $t('welcome.content.setting.general.theme_selector_option_dark') }}</fog-option>
+                    <fog-option
+                      size="mini"
+                      value="System"
+                    >{{ $t('welcome.content.setting.general.theme_selector_option_system') }}</fog-option>
+                  </fog-select>
+                </fog-form-item>
+                <!-- 语言 -->
+                <fog-form-item
+                  field="theme"
+                  :label="$t('welcome.content.setting.general.language_label_text')"
+                >
+                  <fog-select
+                    :placeholder="$t('welcome.content.setting.general.language_selector_placeholder_text')"
+                    v-model="language"
+                    size="mini"
+                    @change="languageChanged"
+                  >
+                    <fog-option
+                      size="mini"
+                      value="ch"
+                    >{{ $t('welcome.content.setting.general.language.ch') }}</fog-option>
+                    <fog-option
+                      size="mini"
+                      value="en"
+                    >{{ $t('welcome.content.setting.general.language.en') }}</fog-option>
+                    <fog-option
+                      size="mini"
+                      value="jp"
+                      disabled
+                    >{{ $t('welcome.content.setting.general.language.jp') }}</fog-option>
+                    <fog-option
+                      size="mini"
+                      value="kor"
+                      disabled
+                    >{{ $t('welcome.content.setting.general.language.kor') }}</fog-option>
+                  </fog-select>
+                </fog-form-item>
+              </fog-form>
             </div>
-          </div>
-          <!-- 设置 -->
-          <div class="setting-content" v-if="currentStep === 2">
-            <fog-steps
-              :current="currentSettingStep"
-              direction="vertical"
-              small
-              changeable
-              class="setting-content-stepper"
-              @change="changeCurrentSettingStep"
-            >
-              <fog-step>{{ $t('welcome.content.setting.general.stepper_label_text') }}</fog-step>
-              <fog-step>{{ $t('welcome.content.setting.git.stepper_label_text') }}</fog-step>
-              <fog-step>{{ $t('welcome.content.setting.service.stepper_label_text') }}</fog-step>
-              <fog-step>{{ $t('welcome.content.setting.addRepositores.stepper_label_text') }}</fog-step>
-            </fog-steps>
-            <div class="setting-content-content">
-              <!-- 通用 -->
-              <div v-if="currentStep === 2 && currentSettingStep === 1">
-                <fog-form
-                  :label-col-props="{ span: 8, offset: 0 }"
-                  :wrapper-col-props="{ span: 16, offset: 0 }"
+            <!-- Git -->
+            <div v-if="currentStep === 2 && currentSettingStep === 2">
+              <fog-form
+                :label-col-props="{ span: 8, offset: 0 }"
+                :wrapper-col-props="{ span: 16, offset: 0 }"
+              >
+                <!-- git地址 -->
+                <fog-form-item
+                  field="gitBinary"
+                  :label="$t('welcome.content.setting.git.git_binary_label_text')"
                 >
-                  <!-- 默认clone位置 -->
-                  <fog-form-item
-                    field="default folder"
-                    :label="$t('welcome.content.setting.general.default_folder_label_text')"
+                  <fog-select
+                    :placeholder="$t('welcome.content.setting.git.git_binary_placeholder_text')"
+                    size="mini"
+                    v-model="gitBinaryName"
+                    @change="changeGitBinary"
                   >
-                    <fog-button
-                      type="text"
+                    <fog-option
+                      v-for="existGitBinary in existGitBinarys"
                       size="mini"
-                      @click="openLogFolderDialog"
-                    >{{ store.state.appearance.defaultFolder || t('welcome.content.setting.general.default_folder_placeholder_text') }}</fog-button>
-                  </fog-form-item>
-                  <!-- 主题 -->
-                  <fog-form-item
-                    field="theme"
-                    :label="$t('welcome.content.setting.general.theme_label_text')"
-                  >
-                    <fog-select
-                      :placeholder="$t('welcome.content.setting.general.theme_placeholder_text')"
-                      v-model="theme"
-                      size="mini"
-                      @change="themeChanged"
-                    >
-                      <fog-option
-                        size="mini"
-                        value="Light"
-                      >{{ $t('welcome.content.setting.general.theme_selector_option_light') }}</fog-option>
-                      <fog-option
-                        size="mini"
-                        value="Dark"
-                      >{{ $t('welcome.content.setting.general.theme_selector_option_dark') }}</fog-option>
-                      <fog-option
-                        size="mini"
-                        value="System"
-                      >{{ $t('welcome.content.setting.general.theme_selector_option_system') }}</fog-option>
-                    </fog-select>
-                  </fog-form-item>
-                  <!-- 语言 -->
-                  <fog-form-item
-                    field="theme"
-                    :label="$t('welcome.content.setting.general.language_label_text')"
-                  >
-                    <fog-select
-                      :placeholder="$t('welcome.content.setting.general.language_selector_placeholder_text')"
-                      v-model="language"
-                      size="mini"
-                      @change="languageChanged"
-                    >
-                      <fog-option
-                        size="mini"
-                        value="ch"
-                      >{{ $t('welcome.content.setting.general.language.ch') }}</fog-option>
-                      <fog-option
-                        size="mini"
-                        value="en"
-                      >{{ $t('welcome.content.setting.general.language.en') }}</fog-option>
-                      <fog-option
-                        size="mini"
-                        value="jp"
-                        disabled
-                      >{{ $t('welcome.content.setting.general.language.jp') }}</fog-option>
-                      <fog-option
-                        size="mini"
-                        value="kor"
-                        disabled
-                      >{{ $t('welcome.content.setting.general.language.kor') }}</fog-option>
-                    </fog-select>
-                  </fog-form-item>
-                </fog-form>
-              </div>
-              <!-- Git -->
-              <div v-if="currentStep === 2 && currentSettingStep === 2">
-                <fog-form
-                  :label-col-props="{ span: 8, offset: 0 }"
-                  :wrapper-col-props="{ span: 16, offset: 0 }"
+                    >{{ existGitBinary }}</fog-option>
+                    <template #footer>
+                      <div style="padding: 6px 0; text-align: center;">
+                        <fog-button
+                          size="mini"
+                          style="width: 90%;"
+                        >{{ $t('welcome.content.setting.git.git_binary_button_text') }}</fog-button>
+                      </div>
+                    </template>
+                  </fog-select>
+                </fog-form-item>
+                <!-- Git全局信息-name -->
+                <fog-form-item
+                  :label="$t('welcome.content.setting.git.git_global_config_label_text')"
+                ></fog-form-item>
+                <fog-form-item
+                  field="git global name"
+                  :label="$t('welcome.content.setting.git.git_global_name_label_text')"
                 >
-                  <!-- git地址 -->
-                  <fog-form-item
-                    field="gitBinary"
-                    :label="$t('welcome.content.setting.git.git_binary_label_text')"
+                  <fog-input
+                    size="mini"
+                    :placeholder="$t('welcome.content.setting.git.git_global_name_placeholder_text')"
+                    v-model="globalName"
+                    @change="globalNameChanged"
+                  />
+                </fog-form-item>
+                <!-- Git全局信息-email -->
+                <fog-form-item
+                  field="git global email"
+                  :label="$t('welcome.content.setting.git.git_global_email_label_text')"
+                >
+                  <fog-input
+                    size="mini"
+                    :placeholder="$t('welcome.content.setting.git.git_global_email_placeholder_text')"
+                    v-model="globalEmail"
+                    @change="globalEmailChanged"
+                  />
+                </fog-form-item>
+              </fog-form>
+            </div>
+            <!-- 账户 -->
+            <div v-if="currentStep === 2 && currentSettingStep === 3" class="account-service">
+              <div class="account-service-title">
+                <div class="account-service-title-pair">
+                  <fog-button
+                    size="mini"
+                    type="outline"
+                    @click="addServiceAccount(ServiceAccountType.Github)"
                   >
-                    <fog-select
-                      :placeholder="$t('welcome.content.setting.git.git_binary_placeholder_text')"
-                      size="mini"
-                      v-model="gitBinaryName"
-                      @change="changeGitBinary"
-                    >
-                      <fog-option
-                        v-for="existGitBinary in existGitBinarys"
-                        size="mini"
-                      >{{ existGitBinary }}</fog-option>
-                      <template #footer>
-                        <div style="padding: 6px 0; text-align: center;">
-                          <fog-button
-                            size="mini"
-                            style="width: 90%;"
-                          >{{ $t('welcome.content.setting.git.git_binary_button_text') }}</fog-button>
-                        </div>
-                      </template>
-                    </fog-select>
-                  </fog-form-item>
-                  <!-- Git全局信息-name -->
-                  <fog-form-item
-                    :label="$t('welcome.content.setting.git.git_global_config_label_text')"
-                  ></fog-form-item>
-                  <fog-form-item
-                    field="git global name"
-                    :label="$t('welcome.content.setting.git.git_global_name_label_text')"
+                    Github
+                    <template #icon>
+                      <icon-github />
+                    </template>
+                  </fog-button>
+                  <fog-button
+                    size="mini"
+                    type="outline"
+                    disabled
+                    class="account-service-title-bottom-button"
+                    @click="addServiceAccount(ServiceAccountType.GithubEnterprise)"
                   >
-                    <fog-input
-                      size="mini"
-                      :placeholder="$t('welcome.content.setting.git.git_global_name_placeholder_text')"
-                      v-model="globalName"
-                      @change="globalNameChanged"
-                    />
-                  </fog-form-item>
-                  <!-- Git全局信息-email -->
-                  <fog-form-item
-                    field="git global email"
-                    :label="$t('welcome.content.setting.git.git_global_email_label_text')"
-                  >
-                    <fog-input
-                      size="mini"
-                      :placeholder="$t('welcome.content.setting.git.git_global_email_placeholder_text')"
-                      v-model="globalEmail"
-                      @change="globalEmailChanged"
-                    />
-                  </fog-form-item>
-                </fog-form>
-              </div>
-              <!-- 账户 -->
-              <div v-if="currentStep === 2 && currentSettingStep === 3" class="account-service">
-                <div class="account-service-title">
-                  <div class="account-service-title-pair">
-                    <fog-button
-                      size="mini"
-                      type="outline"
-                      @click="addServiceAccount(ServiceAccountType.Github)"
-                    >
-                      Github
-                      <template #icon>
-                        <icon-github />
-                      </template>
-                    </fog-button>
-                    <fog-button
-                      size="mini"
-                      type="outline"
-                      disabled
-                      class="account-service-title-bottom-button"
-                      @click="addServiceAccount(ServiceAccountType.GithubEnterprise)"
-                    >
-                      Github Enterprise
-                      <template #icon>
-                        <icon-github />
-                      </template>
-                    </fog-button>
-                  </div>
-                  <div class="account-service-title-pair">
-                    <fog-button
-                      size="mini"
-                      type="outline"
-                      disabled
-                      @click="addServiceAccount(ServiceAccountType.Gitlab)"
-                    >
-                      Gitlab
-                      <template #icon>
-                        <icon-gitlab />
-                      </template>
-                    </fog-button>
-                    <fog-button
-                      size="mini"
-                      type="outline"
-                      class="account-service-title-bottom-button"
-                      @click="addServiceAccount(ServiceAccountType.GitlabCEEE)"
-                    >
-                      Gitlab CE/EE
-                      <template #icon>
-                        <icon-gitlab />
-                      </template>
-                    </fog-button>
-                  </div>
-                  <div class="account-service-title-pair">
-                    <fog-button
-                      size="mini"
-                      type="outline"
-                      @click="addServiceAccount(ServiceAccountType.Gitee)"
-                    >Gitee</fog-button>
-                    <fog-button
-                      size="mini"
-                      type="outline"
-                      class="account-service-title-bottom-button"
-                      disabled
-                    >Conding</fog-button>
-                  </div>
-                  <div class="account-service-title-pair">
-                    <fog-button
-                      size="mini"
-                      type="outline"
-                      disabled
-                      @click="addServiceAccount(ServiceAccountType.Bitbucket)"
-                    >Bitbucket</fog-button>
-                    <fog-button
-                      size="mini"
-                      type="outline"
-                      disabled
-                      class="account-service-title-bottom-button"
-                      @click="addServiceAccount(ServiceAccountType.BitbucketServer)"
-                    >Bitbucket Server</fog-button>
-                  </div>
+                    Github Enterprise
+                    <template #icon>
+                      <icon-github />
+                    </template>
+                  </fog-button>
                 </div>
-                <div class="account-service-list">
-                  <fog-list
-                    size="small"
-                    max-height="240"
-                    class="account-service-list-main"
-                    v-if="serviceAccounts && serviceAccounts.length > 0"
+                <div class="account-service-title-pair">
+                  <fog-button
+                    size="mini"
+                    type="outline"
+                    disabled
+                    @click="addServiceAccount(ServiceAccountType.Gitlab)"
                   >
-                    <fog-list-item v-for="serviceAccount in serviceAccounts">
-                      <fog-list-item-meta
-                        :title="serviceAccount.name"
-                        description="Beijing ByteDance Technology Co., Ltd. is an enterprise located in China."
-                      >
-                        <template #avatar>
-                          <fog-avatar>
-                            <img :src="serviceAccount.avatar" />
-                          </fog-avatar>
-                        </template>
-                      </fog-list-item-meta>
-                    </fog-list-item>
-                  </fog-list>
-                  <fog-empty v-else />
+                    Gitlab
+                    <template #icon>
+                      <icon-gitlab />
+                    </template>
+                  </fog-button>
+                  <fog-button
+                    size="mini"
+                    type="outline"
+                    class="account-service-title-bottom-button"
+                    @click="addServiceAccount(ServiceAccountType.GitlabCEEE)"
+                  >
+                    Gitlab CE/EE
+                    <template #icon>
+                      <icon-gitlab />
+                    </template>
+                  </fog-button>
+                </div>
+                <div class="account-service-title-pair">
+                  <fog-button
+                    size="mini"
+                    type="outline"
+                    @click="addServiceAccount(ServiceAccountType.Gitee)"
+                  >Gitee</fog-button>
+                  <fog-button
+                    size="mini"
+                    type="outline"
+                    class="account-service-title-bottom-button"
+                    disabled
+                  >Conding</fog-button>
+                </div>
+                <div class="account-service-title-pair">
+                  <fog-button
+                    size="mini"
+                    type="outline"
+                    disabled
+                    @click="addServiceAccount(ServiceAccountType.Bitbucket)"
+                  >Bitbucket</fog-button>
+                  <fog-button
+                    size="mini"
+                    type="outline"
+                    disabled
+                    class="account-service-title-bottom-button"
+                    @click="addServiceAccount(ServiceAccountType.BitbucketServer)"
+                  >Bitbucket Server</fog-button>
                 </div>
               </div>
-              <!-- 添加本地 -->
-              <div v-if="currentStep === 2 && currentSettingStep === 4">Add Repositores</div>
+              <div class="account-service-list">
+                <fog-list
+                  size="small"
+                  max-height="240"
+                  class="account-service-list-main"
+                  v-if="serviceAccounts && serviceAccounts.length > 0"
+                >
+                  <fog-list-item v-for="serviceAccount in serviceAccounts">
+                    <fog-list-item-meta :title="serviceAccount.name" description="123213">
+                      <template #avatar>
+                        <fog-avatar>
+                          <img :src="serviceAccount.avatar" />
+                        </fog-avatar>
+                      </template>
+                    </fog-list-item-meta>
+                  </fog-list-item>
+                </fog-list>
+                <fog-empty v-else />
+              </div>
             </div>
+            <!-- 添加本地 -->
+            <div v-if="currentStep === 2 && currentSettingStep === 4">Add Repositores</div>
           </div>
-          <!-- 完成 -->
-          <div class="finish-content" v-if="currentStep === 3">
-            <fog-result status="success" :title="$t('view.welcome.finish_page.title')">
-              <template #subtitle>{{ $t('view.welcome.finish_page.subtitle') }}</template>
-              <template #extra>
-                <fog-button
-                  type="primary"
-                  size="mini"
-                  @click="gotoHomePage"
-                >{{ $t('view.welcome.bottom_button.finish_button_text') }}</fog-button>
-              </template>
-            </fog-result>
-          </div>
-        </fog-layout-content>
-        <fog-layout-footer class="welcome-footer">
-          <fog-button type="primary" size="mini" @click="prevStep" :disabled="currentStep < 2">
-            <icon-left />
-            {{ $t("welcome.bottom.prev_button_text") }}
-          </fog-button>
-          <fog-button
-            type="primary"
-            size="mini"
-            @click="nextStep"
-            :style="{ marginLeft: '20px' }"
-            :disabled="isNextStepDisabled"
-            v-if="currentStep !== 3"
-          >
-            {{ $t("welcome.bottom.next_button_text") }}
-            <icon-right />
-          </fog-button>
-          <fog-button
-            v-if="currentStep === 3"
-            type="primary"
-            size="mini"
-            @click="gotoHomePage"
-            :style="{ marginLeft: '20px' }"
-          >
-            {{ $t("welcome.bottom.finish_button_text") }}
-            <icon-right />
-          </fog-button>
-        </fog-layout-footer>
-      </fog-layout>
-    </fog-spin>
+        </div>
+        <!-- 完成 -->
+        <div class="finish-content" v-if="currentStep === 3">
+          <fog-result status="success" :title="$t('view.welcome.finish_page.title')">
+            <template #subtitle>{{ $t('view.welcome.finish_page.subtitle') }}</template>
+            <template #extra>
+              <fog-button
+                type="primary"
+                size="mini"
+                @click="gotoHomePage"
+              >{{ $t('view.welcome.bottom_button.finish_button_text') }}</fog-button>
+            </template>
+          </fog-result>
+        </div>
+      </fog-layout-content>
+      <fog-layout-footer class="welcome-footer">
+        <fog-button type="primary" size="mini" @click="prevStep" :disabled="currentStep < 2">
+          <icon-left />
+          {{ $t("welcome.bottom.prev_button_text") }}
+        </fog-button>
+        <fog-button
+          type="primary"
+          size="mini"
+          @click="nextStep"
+          :style="{ marginLeft: '20px' }"
+          :disabled="isNextStepDisabled"
+          v-if="currentStep !== 3"
+        >
+          {{ $t("welcome.bottom.next_button_text") }}
+          <icon-right />
+        </fog-button>
+        <fog-button
+          v-if="currentStep === 3"
+          type="primary"
+          size="mini"
+          @click="gotoHomePage"
+          :style="{ marginLeft: '20px' }"
+        >
+          {{ $t("welcome.bottom.finish_button_text") }}
+          <icon-right />
+        </fog-button>
+      </fog-layout-footer>
+    </fog-layout>
   </div>
 </template>
 
@@ -375,7 +363,6 @@ const router = useRouter()
 
 const currentStep = ref(2)
 const currentSettingStep = ref(3)
-const isLoading = ref(false)
 const prevStep = () => {
   if (currentStep.value === 2) {
     if (currentSettingStep.value === 1) {
@@ -468,14 +455,11 @@ const globalNameChanged = (e: string) => { setGlobalGitName(store.state.appearan
 const globalEmailChanged = (e: string) => { setGlobalGitEmail(store.state.appearance.gitBinary, e); }
 
 const addServiceAccount = (serviceAccountType: ServiceAccountType) => {
-  console.log('设置loading=true');
-  isLoading.value = true
-  console.log('打开窗口');
-  const _ = ipcRenderer.sendSync('add-service-Account', {
+  const userInfo = ipcRenderer.sendSync('add-service-Account', {
     type: serviceAccountType,
   })
-  console.log('窗口关闭，设置loading=false');
-  isLoading.value = false
+  console.log('userInfo', userInfo);
+  userInfo && store.commit('addServiceAccounts', userInfo)
 }
 
 </script>
