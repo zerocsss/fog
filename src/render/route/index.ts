@@ -1,16 +1,21 @@
-import { createRouter, createWebHashHistory } from "vue-router"
+import { createRouter, createWebHashHistory, createWebHistory } from "vue-router"
 import Home from "../views/Home.vue"
 import Welcome from "../views/Welcome.vue"
 import { electronStore } from "../utils/electronStore"
-
-const isFirstLoad = electronStore.store.get('isFirstLoad', true)
+import AddServiceAccount from "../components/window/AddServiceAccount.vue"
 
 const routes = [
   {
-    path: '/', component: isFirstLoad ? Welcome : Home
+    path: '/', component: Home
+  },
+  {
+    path: '/welcome', component: Welcome
   },
   {
     path: '/home', component: Home
+  },
+  {
+    path: '/addServiceAccount/:type', component: AddServiceAccount
   }
 ]
 

@@ -6,7 +6,7 @@ type GigConfigJson = {
 }
 
 const parseGitConfig = (config: string) => {
-  const lines = isWin() ? config.split('\n') : config.split('\r\n');
+  const lines = config.split('\n')
   const gitConfig = {} as GigConfigJson;
   for (let line of lines) {
     if (line) {

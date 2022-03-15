@@ -1,4 +1,4 @@
-const { app, BrowserWindow, Tray, Menu, ipcMain, dialog, globalShortcut, MenuItem } = require("electron")
+const { app, BrowserWindow, ipcMain } = require("electron")
 const path = require('path')
 
 // electron-store 数据持久化
@@ -42,6 +42,13 @@ ipcMain.on("close-welcome-and-open-main", () => {
   windowsManager.removeWindow(welcomeWin)
 
   creatWindow()
+})
+
+ipcMain.on('add-service-Account', (e, arg) => {
+  const addServiceAccountWin = createAddServiceAccountWindow(arg.type)
+  addServiceAccountWin.on('close', () => {
+    e.returnValue = ''
+  })
 })
 
 function creatWindow() {
@@ -96,7 +103,7 @@ function createWelcoleWindow() {
     }
   })
 
-  welcomeWin.loadURL("http://localhost:3000")
+  welcomeWin.loadURL("http://localhost:3000/#/welcome")
 
   welcomeWin.webContents.openDevTools()
 
@@ -104,11 +111,41 @@ function createWelcoleWindow() {
 
 }
 
+function createAddServiceAccountWindow(type) {
+  addServiceAccountWin = new BrowserWindow({
+    width: 400,
+    height: 300,
+    title: 'Welcome to fog',
+    resizable: false,
+    movable: true,
+    icon: path.join(__dirname, '..', 'build', 'icons', 'icon.png'),
+    frame: process.platform === "win32",
+    titleBarStyle: process.platform === "win32" ? "default" : "hidden",
+    vibrancy: 'light',
+    visualEffectState: "active",
+    transparent: true,
+    opacity: store.get('windowOpacity' || 0.9),
+    webPreferences: {
+      webSecurity: false,
+      nodeIntegration: true,
+      contextIsolation: false,
+      devTools: true
+    }
+  })
+
+  addServiceAccountWin.loadURL(`http://localhost:3000/#/addServiceAccount/${type}`)
+  addServiceAccountWin.webContents.openDevTools()
+
+  windowsManager.addWindow(addServiceAccountWin)
+
+  return addServiceAccountWin
+}
+
 app.whenReady().then(() => {
   tray = initTary()
   app.setAsDefaultProtocolClient('lver', process.execPath, [`${__dirname}`])
   const isFirstLoad = store.get('isFirstLoad', true)
-  if(isFirstLoad) {
+  if (isFirstLoad) {
     createWelcoleWindow()
   } else {
     creatWindow()

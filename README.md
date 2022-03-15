@@ -13,5 +13,4 @@
     - [ ] Bitbucket Server
 
 * 基础功能
-    - [x] git二进制程序的自动查找与配置
     

@@ -1,6 +1,6 @@
 <template>
   <lver-layout class="layout">
-    home
+     This Is Home Page
     <!-- <lver-layout style="height: 100%">
       <lver-layout-sider style="width:280px; height: 100%;">
         <div class="move-window-content"></div>
@@ -46,6 +46,11 @@ body {
 
 .layout {
   height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 40px;
 }
 
 .arco-layout-sider {
@@ -58,7 +63,7 @@ body {
 } */
 
 .arco-layout-sider-light {
-  opacity: 0.8;
+  opacity: 0.85;
 }
 
 .lver-layout-content {

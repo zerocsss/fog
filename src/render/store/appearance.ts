@@ -15,7 +15,7 @@ export interface IAppearanceState {
 const appearance = {
   state() {
     return {
-      theme: electronStore.store.get("theme", ThemeType.System),
+      theme: electronStore.store.get("theme", ThemeType.Dark),
       gitBinary: electronStore.store.get("gitBinary"),
       defaultFolder: electronStore.store.get("defaultFolder", ipcRenderer.sendSync("get-path", { name: 'home' })),
       language: electronStore.store.get("language", "en"),

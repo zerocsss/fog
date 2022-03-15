@@ -3,13 +3,15 @@ import { createStore, useStore as baseUseStore, Store } from "vuex"
 import { IState } from "./type"
 import appearance from "./appearance"
 import shortcut from "./shortcut"
+import serviceAccount from "./serviceAccount"
 
 const key: InjectionKey<Store<IState>> = Symbol()
 
 const store = createStore<IState>({
   modules: {
     appearance,
-    shortcut
+    shortcut,
+    serviceAccount
   }
 })
 
