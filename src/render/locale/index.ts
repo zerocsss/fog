@@ -5,6 +5,8 @@ import jp from "./jp"
 import kor from "./kor"
 
 const i18n = createI18n({
+  legacy: false,
+  globalInjection: true,
   locale: 'en',
   messages: {
     ch,
