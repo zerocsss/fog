@@ -70,8 +70,8 @@ function creatWindow() {
     titleBarStyle: process.platform === "win32" ? "default" : "hidden",
     vibrancy: 'light',
     visualEffectState: "active",
+    show: false,
     transparent: true,
-    opacity: store.get('windowOpacity' || 0.9),
     webPreferences: {
       webSecurity: false,
       nodeIntegration: true,
@@ -80,6 +80,7 @@ function creatWindow() {
     }
   })
 
+  mainWin.on('ready-to-show', () => { mainWin.show() })
   mainWin.loadURL("http://localhost:3000/")
 
   mainWin.webContents.openDevTools()
@@ -99,9 +100,9 @@ function createWelcoleWindow() {
     frame: process.platform === "win32",
     titleBarStyle: process.platform === "win32" ? "default" : "hidden",
     vibrancy: 'light',
+    show: false,
     visualEffectState: "active",
     transparent: true,
-    opacity: store.get('windowOpacity' || 0.9),
     webPreferences: {
       webSecurity: false,
       nodeIntegration: true,
@@ -109,6 +110,8 @@ function createWelcoleWindow() {
       devTools: true
     }
   })
+
+  welcomeWin.on('ready-to-show', () => { welcomeWin.show() })
 
   welcomeWin.loadURL("http://localhost:3000/#/welcome")
 
@@ -121,11 +124,12 @@ function createAddServiceAccountWindow(type) {
   addServiceAccountWin = new BrowserWindow({
     parent: welcomeWin,
     modal: true,
-    width: 400,
-    height: 300,
+    width: 600,
+    height: 320,
     title: 'Add Service Account',
     resizable: false,
     movable: false,
+    show: false,
     icon: path.join(__dirname, '..', 'build', 'icons', 'icon.png'),
     frame: process.platform === "win32",
     titleBarStyle: process.platform === "win32" ? "default" : "hidden",
@@ -136,6 +140,11 @@ function createAddServiceAccountWindow(type) {
       contextIsolation: false,
       devTools: true
     }
+  })
+
+  addServiceAccountWin.on('ready-to-show', () => {
+    addServiceAccountWin.show()
+    addServiceAccountWin.focus()
   })
 
   addServiceAccountWin.loadURL(`http://localhost:3000/#/addServiceAccount/${type}`)

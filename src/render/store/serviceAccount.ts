@@ -69,6 +69,9 @@ const serviceAccount = {
     addServiceAccounts(state: IServiceAccountState, serviceAccount: IServiceAccount) {
       state.serviceAccounts.push(serviceAccount)
       console.log('asdasdasd', state.serviceAccounts);
+    },
+    deleteServiceAccount(state: IServiceAccountState, serviceAccount: IServiceAccount) {
+      state.serviceAccounts.splice(state.serviceAccounts.indexOf(serviceAccount), 1)
     }
   }
 }

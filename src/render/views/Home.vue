@@ -51,6 +51,9 @@ body {
   justify-content: center;
   align-items: center;
   font-size: 40px;
+  background-color: var(--color-neutral-2);
+  color: var(--color-text-2);
+  opacity: 0.85;
 }
 
 .arco-layout-sider {

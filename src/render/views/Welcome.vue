@@ -199,11 +199,15 @@
             </div>
             <!-- 账户 -->
             <div v-if="currentStep === 2 && currentSettingStep === 3" class="account-service">
+              <div
+                style="width: 89%;"
+              >{{ $t('welcome.content.setting.service.select_account_type_title') }}</div>
               <div class="account-service-title">
                 <div class="account-service-title-pair">
                   <fog-button
                     size="mini"
                     type="outline"
+                    disabled
                     @click="addServiceAccount(ServiceAccountType.Github)"
                   >
                     Github
@@ -252,6 +256,7 @@
                   <fog-button
                     size="mini"
                     type="outline"
+                    disabled
                     @click="addServiceAccount(ServiceAccountType.Gitee)"
                   >Gitee</fog-button>
                   <fog-button
@@ -285,6 +290,18 @@
                   v-if="serviceAccounts && serviceAccounts.length > 0"
                 >
                   <fog-list-item v-for="serviceAccount in serviceAccounts">
+                    <template #actions>
+                      <fog-button
+                        size="mini"
+                        type="text"
+                        status="danger"
+                        @click="deleteServiceAccount(serviceAccount)"
+                      >
+                        <template #icon>
+                          <icon-delete />
+                        </template>
+                      </fog-button>
+                    </template>
                     <fog-list-item-meta :title="serviceAccount.name" description="123213">
                       <template #avatar>
                         <fog-avatar>
@@ -353,7 +370,7 @@ import { useI18n } from "vue-i18n"
 import { useRouter } from 'vue-router';
 import { searchExistGitBinary, getGlobalGitConfig, setGlobalGitEmail, setGlobalGitName } from "../utils/git"
 import { electronStore } from '../utils/electronStore';
-import { ServiceAccountType } from '../store/serviceAccount';
+import { IServiceAccount, ServiceAccountType } from '../store/serviceAccount';
 
 const { ipcRenderer } = require("electron")
 
@@ -462,6 +479,9 @@ const addServiceAccount = (serviceAccountType: ServiceAccountType) => {
   userInfo && store.commit('addServiceAccounts', userInfo)
 }
 
+const deleteServiceAccount = (serviceAccount: IServiceAccount) => {
+  store.commit('deleteServiceAccount', serviceAccount)
+}
 </script>
 
 <style scoped>

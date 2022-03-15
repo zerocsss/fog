@@ -36,6 +36,22 @@ const en = {
         },
         service: {
           stepper_label_text: 'Service Account',
+          add_button_text: 'Add Account',
+          cancel_button_text: 'Cancel',
+          select_account_type_title: 'Select Your Service Accounts To Use',
+          gitlabceee: {
+            authentication_label_text: 'Authentication',
+            host_label_text: 'Host',
+            host_placeholder_text: 'http://example.com',
+            username_label_text: 'Username',
+            username_placeholder_text: 'Username',
+            personal_access_token_label_text: 'Personal Access Token',
+            personal_access_token_placeholder_text: 'Personal Access Token',
+            password_label_text: 'Password',
+            password_placeholder_text: 'Password',
+            private_token_label_text: 'Private Token',
+            private_token_placeholder_text: 'Private Token',
+          }
         },
         git: {
           stepper_label_text: "Git Config",
