@@ -382,8 +382,8 @@ const store = useStore()
 const { t } = useI18n()
 const router = useRouter()
 
-const currentStep = ref(2)
-const currentSettingStep = ref(3)
+const currentStep = ref(1)
+const currentSettingStep = ref(1)
 const isLoading = ref(false)
 const prevStep = () => {
   if (currentStep.value === 2) {
