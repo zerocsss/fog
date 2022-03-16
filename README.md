@@ -3,14 +3,15 @@
 
 ## TODO
 * 云账户  
-    - [ ] Github
+    - [x] Github
     - [ ] Github Enterprise
     - [ ] Gitee
     - [ ] GitLab
-    - [ ] GitLab CEEE
+    - [x] GitLab CEEE
     - [ ] 腾讯云 Coding
     - [ ] Bitbucket
     - [ ] Bitbucket Server
 
 * 基础功能
+    - [ ] 欢迎窗口
     
