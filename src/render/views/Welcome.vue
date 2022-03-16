@@ -383,8 +383,8 @@ const store = useStore()
 const { t } = useI18n()
 const router = useRouter()
 
-const currentStep = ref(2)
-const currentSettingStep = ref(4)
+const currentStep = ref(1)
+const currentSettingStep = ref(1)
 const prevStep = () => {
   if (currentStep.value === 2) {
     if (currentSettingStep.value === 1) {
