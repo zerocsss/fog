@@ -2,17 +2,20 @@
   <div class="add-service-account">
     <component :is="component" ref="componentRef"></component>
     <div class="footer">
-      <fog-button
-        @click="cancel"
-        size="mini"
-        type="outline"
-      >{{ $t('welcome.content.setting.service.cancel_button_text') }}</fog-button>
-      <fog-button
-        @click="add"
-        size="mini"
-        type="primary"
-        style="margin-left: 10px;"
-      >{{ $t('welcome.content.setting.service.add_button_text') }}</fog-button>
+      <div>{{ authenticationStatus }}</div>
+      <div class="footer-button">
+        <fog-button
+          @click="cancel"
+          size="mini"
+          type="outline"
+        >{{ $t('welcome.content.setting.service.cancel_button_text') }}</fog-button>
+        <fog-button
+          @click="add"
+          size="mini"
+          type="primary"
+          style="margin-left: 10px;"
+        >{{ $t('welcome.content.setting.service.add_button_text') }}</fog-button>
+      </div>
     </div>
   </div>
 </template>
@@ -43,6 +46,7 @@ onMounted(() => {
 });
 
 const routeParams = router.currentRoute.value.params
+const authenticationStatus = ref('')
 
 const component = computed(() => {
   switch (routeParams.type) {
@@ -57,17 +61,14 @@ const component = computed(() => {
   }
 })
 
-const add = () => {
-  const { authenticationType, host, username, personalAccessToken, password, privateToken } = componentRef.value
-  if (authenticationType === ServiceAccountAuthenticationType.PersonalAccessToken) {
-    require("electron").ipcRenderer.send('add-service-account-successed', {
-      accountType: ServiceAccountType.GitlabCEEE,
-      authType: ServiceAccountAuthenticationType.PersonalAccessToken,
-      host: host,
-      name: username,
-      avatar: "https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/3ee5f13fb09879ecb5185e440cef6eb9.png~tplv-uwbnlip3yd-webp.webp"
-    })
-  } else if (authenticationType === ServiceAccountAuthenticationType.PrivateToken) { }
+const add = async () => {
+  authenticationStatus.value = "Authenticating..."
+  try {
+    await componentRef.value.addAccount()
+    authenticationStatus.value = "Authenticate Successed!"
+  } catch (error) {
+    authenticationStatus.value = "Authenticate Failed!"
+  }
 }
 const cancel = () => {
   require("electron").ipcRenderer.send('add-service-account-canceled')
@@ -91,6 +92,11 @@ const cancel = () => {
 
 .footer {
   width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.footer-button {
   display: flex;
   justify-content: flex-end;
   align-items: center;

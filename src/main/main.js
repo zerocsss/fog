@@ -147,7 +147,7 @@ function createAddServiceAccountWindow(type) {
     addServiceAccountWin.focus()
   })
 
-  addServiceAccountWin.loadURL(`http://localhost:3000/#/addServiceAccount/${type}`)
+  addServiceAccountWin.loadURL(encodeURI(`http://localhost:3000/#/addServiceAccount/${type}`))
 
   addServiceAccountWin.openDevTools()
 }

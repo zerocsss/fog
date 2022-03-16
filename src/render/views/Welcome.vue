@@ -207,7 +207,6 @@
                   <fog-button
                     size="mini"
                     type="outline"
-                    disabled
                     @click="addServiceAccount(ServiceAccountType.Github)"
                   >
                     Github
@@ -233,11 +232,11 @@
                     size="mini"
                     type="outline"
                     disabled
-                    @click="addServiceAccount(ServiceAccountType.Gitlab)"
+                    @click="addServiceAccount(ServiceAccountType.GitLab)"
                   >
-                    Gitlab
+                    GitLab
                     <template #icon>
-                      <icon-gitlab />
+                      <icon-GitLab />
                     </template>
                   </fog-button>
                   <fog-button
@@ -246,9 +245,9 @@
                     class="account-service-title-bottom-button"
                     @click="addServiceAccount(ServiceAccountType.GitlabCEEE)"
                   >
-                    Gitlab CE/EE
+                    GitLab CEEE
                     <template #icon>
-                      <icon-gitlab />
+                      <icon-GitLab />
                     </template>
                   </fog-button>
                 </div>
@@ -302,10 +301,16 @@
                         </template>
                       </fog-button>
                     </template>
-                    <fog-list-item-meta :title="serviceAccount.name" description="123213">
+                    <fog-list-item-meta
+                      :title="serviceAccount.userInfo.name"
+                      :description="serviceAccount.accountType === ServiceAccountType.GitlabCEEE ? `GitLab CEEE: ${serviceAccount.host}` : serviceAccount.accountType"
+                    >
                       <template #avatar>
                         <fog-avatar>
-                          <img :src="serviceAccount.avatar" />
+                          <img
+                            :src="serviceAccount.userInfo.avatar_url"
+                            @click="avatarClicked(serviceAccount.userInfo.web_url)"
+                          />
                         </fog-avatar>
                       </template>
                     </fog-list-item-meta>
@@ -315,7 +320,7 @@
               </div>
             </div>
             <!-- 添加本地 -->
-            <div v-if="currentStep === 2 && currentSettingStep === 4">Add Repositores</div>
+            <div v-if="currentStep === 2 && currentSettingStep === 4"></div>
           </div>
         </div>
         <!-- 完成 -->
@@ -372,14 +377,14 @@ import { searchExistGitBinary, getGlobalGitConfig, setGlobalGitEmail, setGlobalG
 import { electronStore } from '../utils/electronStore';
 import { IServiceAccount, ServiceAccountType } from '../store/serviceAccount';
 
-const { ipcRenderer } = require("electron")
+const { ipcRenderer, shell } = require("electron")
 
 const store = useStore()
 const { t } = useI18n()
 const router = useRouter()
 
 const currentStep = ref(2)
-const currentSettingStep = ref(3)
+const currentSettingStep = ref(4)
 const prevStep = () => {
   if (currentStep.value === 2) {
     if (currentSettingStep.value === 1) {
@@ -475,12 +480,15 @@ const addServiceAccount = (serviceAccountType: ServiceAccountType) => {
   const userInfo = ipcRenderer.sendSync('add-service-Account', {
     type: serviceAccountType,
   })
-  console.log('userInfo', userInfo);
   userInfo && store.commit('addServiceAccounts', userInfo)
 }
 
 const deleteServiceAccount = (serviceAccount: IServiceAccount) => {
   store.commit('deleteServiceAccount', serviceAccount)
+}
+
+const avatarClicked = (avatarUrl?: string) => {
+  avatarUrl && shell.openExternal(avatarUrl)
 }
 </script>
 

@@ -38,7 +38,7 @@ const en = {
           stepper_label_text: 'Service Account',
           add_button_text: 'Add Account',
           cancel_button_text: 'Cancel',
-          select_account_type_title: 'Select Your Service Accounts To Use',
+          select_account_type_title: 'Select The Type of Account You Want To Add',
           gitlabceee: {
             authentication_label_text: 'Authentication',
             host_label_text: 'Host',

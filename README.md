@@ -6,8 +6,8 @@
     - [ ] Github
     - [ ] Github Enterprise
     - [ ] Gitee
-    - [ ] Gitlab
-    - [ ] Gitlab CE/EE
+    - [ ] GitLab
+    - [ ] GitLab CEEE
     - [ ] 腾讯云 Coding
     - [ ] Bitbucket
     - [ ] Bitbucket Server

@@ -1,15 +1,18 @@
+import { FogUserInfo } from "../model/user"
+import { electronStore } from "../utils/electronStore";
+
 /**
  * @enum 账户类型
  */
 export enum ServiceAccountType {
-  Github = "github",
-  GithubEnterprise = "github-enterprise",
-  Gitee = "gitee",
-  Gitlab = "gitlab",
-  GitlabCEEE = "gitlab-ceee",
-  Coding = "coding",
-  Bitbucket = "bitbucket",
-  BitbucketServer = "bitbucket-server",
+  Github = "GitHub",
+  GithubEnterprise = "GitHub Enterprise",
+  Gitee = "Gitee",
+  GitLab = "GitLab",
+  GitlabCEEE = "GitLab CEEE",
+  Coding = "CODING DevOps",
+  Bitbucket = "Bitbucket",
+  BitbucketServer = "Bitbucket Server",
 }
 
 /**
@@ -42,14 +45,9 @@ export interface IServiceAccount {
   host: string
 
   /**
-   * 用户名
+   * 用户信息
    */
-  name: string
-
-  /**
-   * 头像
-   */
-  avatar: string
+  userInfo: FogUserInfo
 }
 
 /**
@@ -62,16 +60,17 @@ export interface IServiceAccountState {
 const serviceAccount = {
   state() {
     return {
-      serviceAccounts: [],
+      serviceAccounts: [] = electronStore.store.get("serviceAccounts", [])
     }
   },
   mutations: {
     addServiceAccounts(state: IServiceAccountState, serviceAccount: IServiceAccount) {
       state.serviceAccounts.push(serviceAccount)
-      console.log('asdasdasd', state.serviceAccounts);
+      electronStore.store.set("serviceAccounts", state.serviceAccounts)
     },
     deleteServiceAccount(state: IServiceAccountState, serviceAccount: IServiceAccount) {
       state.serviceAccounts.splice(state.serviceAccounts.indexOf(serviceAccount), 1)
+      electronStore.store.set("serviceAccounts", state.serviceAccounts)
     }
   }
 }

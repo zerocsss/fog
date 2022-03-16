@@ -1,6 +1,6 @@
 <template>
   <div style="width: 100%;">
-    <div class="head-text">Gitlab CE/EE</div>
+    <div class="head-text">GitLab CEEE</div>
     <!-- Authentication -->
     <fog-row class="grid-demo">
       <fog-col :span="7">
@@ -11,7 +11,7 @@
       <fog-col :span="15">
         <fog-select size="mini" v-model="authenticationType">
           <fog-option>{{ ServiceAccountAuthenticationType.PersonalAccessToken }}</fog-option>
-          <fog-option>{{ ServiceAccountAuthenticationType.PrivateToken }}</fog-option>
+          <fog-option disabled>{{ ServiceAccountAuthenticationType.PrivateToken }}</fog-option>
         </fog-select>
       </fog-col>
     </fog-row>
@@ -104,7 +104,8 @@
 </template>
 <script setup lang="ts">
 import { ref, defineExpose } from 'vue';
-import { ServiceAccountAuthenticationType } from "../../store/serviceAccount"
+import { ServiceAccountAuthenticationType, ServiceAccountType } from "../../store/serviceAccount"
+import gitlabCEEEAxiosInstanceFactory from "../../message/GitLab"
 
 const authenticationType = ref(ServiceAccountAuthenticationType.PersonalAccessToken)
 const host = ref('http://192.168.180.113')
@@ -113,14 +114,24 @@ const personalAccessToken = ref('sVvcAH_My4gwEmVfqpuf')
 const password = ref('')
 const privateToken = ref('')
 
-defineExpose({
-  authenticationType,
-  host,
-  username,
-  personalAccessToken,
-  password,
-  privateToken
-})
+const addAccount = async () => {
+  if (authenticationType.value === ServiceAccountAuthenticationType.PersonalAccessToken) {
+    const axiosInstance = gitlabCEEEAxiosInstanceFactory.getInstance(host.value, username.value, personalAccessToken.value)
+    try {
+      const userInfo = await axiosInstance.listCurrentUser()
+      require("electron").ipcRenderer.send('add-service-account-successed', {
+        accountType: ServiceAccountType.GitlabCEEE,
+        authType: ServiceAccountAuthenticationType.PersonalAccessToken,
+        host: host.value,
+        userInfo
+      })
+    } catch (error) {
+      throw error
+    }
+  } else if (authenticationType.value === ServiceAccountAuthenticationType.PrivateToken) { }
+}
+
+defineExpose({ addAccount })
 </script>
 <style scoped>
 .grid-demo {

@@ -35,6 +35,7 @@
     "start": "concurrently \"vite\" \"electron .\" "
   },
   "dependencies": {
+    "axios": "^0.26.1",
     "dayjs": "^1.10.7",
     "electron-store": "^8.0.1",
     "tinymce": "^5.10.2",
