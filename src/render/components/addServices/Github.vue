@@ -57,7 +57,7 @@ import gitHubAxiosInstanceFactory from "../../message/github"
 
 const authenticationType = ref(ServiceAccountAuthenticationType.PersonalAccessToken)
 const username = ref('xieyuancode')
-const personalAccessToken = ref('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')
+const personalAccessToken = ref('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')
 
 const addAccount = async () => {
   const axiosInstance = gitHubAxiosInstanceFactory.getInstance(username.value, personalAccessToken.value)
