@@ -67,9 +67,9 @@ const en = {
       }
     },
     bottom: {
-      prev_button_text: 'Previou',
+      prev_button_text: 'Back',
       next_button_text: 'Next',
-      finish_button_text: 'Finish',
+      finish_button_text: "Let's Start",
     }
   }
 }
