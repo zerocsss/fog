@@ -103,7 +103,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { ref, defineExpose } from 'vue';
+import { ref } from 'vue';
 import { ServiceAccountAuthenticationType, ServiceAccountType } from "../../store/serviceAccount"
 import gitlabCEEEAxiosInstanceFactory from "../../message/GitLab"
 

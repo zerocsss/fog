@@ -33,6 +33,7 @@ const en = {
         },
         addRepositores: {
           stepper_label_text: "Add Repositores",
+          add_repositores_title_label_text: "Add Local Git Repositoies",
         },
         service: {
           stepper_label_text: 'Service Account',

@@ -17,6 +17,8 @@ const { windowsManager } = require("./windowsManager")
 const { defaultShortcuts } = require("./shortcut")
 // 事件
 const { EventName } = require('./events')
+// git
+const { indexLocalGitFolder } = require("./git")
 
 // 初始化渲染进程的store实例
 initRenderer()
@@ -36,6 +38,7 @@ var tray = null
 let mainWin = null
 let welcomeWin = null
 let addServiceAccountWin = null
+const homePath = app.getPath('home')
 
 // 这段不知道放哪 就放着算了 懒得改了
 ipcMain.on("close-welcome-and-open-main", () => {
@@ -111,7 +114,28 @@ function createWelcoleWindow() {
     }
   })
 
-  welcomeWin.on('ready-to-show', () => { welcomeWin.show() })
+  welcomeWin.on('ready-to-show', () => {
+    welcomeWin.show()
+    indexLocalGitFolder(path.resolve(homePath), [
+      path.join(homePath, 'Applications'),
+      path.join(homePath, 'Movies',),
+      path.join(homePath, 'Music'),
+      path.join(homePath, 'Pictures'),
+      path.join(homePath, 'Downloads'),
+      path.join(homePath, 'Library'),
+      path.join(homePath, '.Trash'),
+      path.join(homePath, 'Parallels'),
+    ]).then(localGitFolders => {
+      let localGitFoldersObject = []
+      localGitFolders.map(localGitFolder => {
+        localGitFoldersObject.push({
+          path: path.join(localGitFolder, '..'),
+          name: path.join(localGitFolder, '..').split(path.sep).pop()
+        })
+      })
+      welcomeWin.webContents.send('local-git-folders', localGitFoldersObject)
+    })
+  })
 
   welcomeWin.loadURL("http://localhost:3000/#/welcome")
 
@@ -158,6 +182,10 @@ app.whenReady().then(() => {
   const isFirstLoad = store.get('isFirstLoad', true)
   if (isFirstLoad) {
     createWelcoleWindow()
+    // indexLocalGitFolder(path.join(homePath, 'Movies'), [
+    // path.join(homePath, 'Movies', 'a'),
+    // ])
+
   } else {
     creatWindow()
   }

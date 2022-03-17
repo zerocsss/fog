@@ -1,7 +1,8 @@
 const fs = require('fs')
 const child_process = require("child_process");
-const { join } = require('path');
+const { join, resolve } = require('path');
 const { isWin } = require("./utils")
+const globby = require("globby")
 
 var searchLocalGitBinary = function () {
   var result = "";
@@ -41,7 +42,21 @@ const setGitGlobalConfig = function (binary, key, value) {
 
 }
 
+/**
+ * 
+ * @param {string} root 
+ * @param { string[] } exclude 
+ */
+const indexLocalGitFolder = function (root, exclude) {
+  const patterns = [join(root, '**', '.git'), ...exclude.map(ex => "!" + resolve(ex, '**', '.git'))]
+  return globby(patterns, {
+    'onlyDirectories': true,
+    deep: 5
+  })
+}
+
 exports.getGitVersionByBinary = getGitVersionByBinary;
 exports.searchLocalGitBinary = searchLocalGitBinary;
 exports.getGigGlobalConfig = getGigGlobalConfig;
 exports.setGitGlobalConfig = setGitGlobalConfig;
+exports.indexLocalGitFolder = indexLocalGitFolder;

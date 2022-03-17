@@ -200,7 +200,7 @@
             <!-- 账户 -->
             <div v-if="currentStep === 2 && currentSettingStep === 3" class="account-service">
               <div
-                style="width: 89%;"
+                style="width: 89%; line-height: 56px;"
               >{{ $t('welcome.content.setting.service.select_account_type_title') }}</div>
               <div class="account-service-title">
                 <div class="account-service-title-pair">
@@ -320,7 +320,25 @@
               </div>
             </div>
             <!-- 添加本地 -->
-            <div v-if="currentStep === 2 && currentSettingStep === 4"></div>
+            <div v-if="currentStep === 2 && currentSettingStep === 4" class="add-local-repos">
+              <div
+                class="add-local-repos-title"
+                style="width: 89%;"
+              >{{ $t('welcome.content.setting.addRepositores.add_repositores_title_label_text') }}</div>
+              <div style="margin-top: 20px; width: 455px;">
+                <fog-list size="small" max-height="240">
+                  <fog-list-item v-for="localGitRespository in localGitRespositories">
+                    <template #actions>
+                      <fog-checkbox v-model="selectedLocalFolder" :value="localGitRespository"></fog-checkbox>
+                    </template>
+                    <fog-list-item-meta
+                      :title="localGitRespository.name"
+                      :description="localGitRespository.path"
+                    ></fog-list-item-meta>
+                  </fog-list-item>
+                </fog-list>
+              </div>
+            </div>
           </div>
         </div>
         <!-- 完成 -->
@@ -383,8 +401,8 @@ const store = useStore()
 const { t } = useI18n()
 const router = useRouter()
 
-const currentStep = ref(1)
-const currentSettingStep = ref(1)
+const currentStep = ref(2)
+const currentSettingStep = ref(4)
 const prevStep = () => {
   if (currentStep.value === 2) {
     if (currentSettingStep.value === 1) {
@@ -422,6 +440,9 @@ const language = ref(store.state.appearance.language);
 const globalName = ref("")
 const globalEmail = ref("")
 
+const localGitRespositories = ref<Array<any>>([])
+const selectedLocalFolder = ref([])
+
 const existGitBinarys = reactive<string[]>([])
 
 const isNextStepDisabled = computed(() => {
@@ -439,6 +460,11 @@ onMounted(() => {
     gitBinaryName.value = existGitBinarys[0]
   }
   refreshGlobalGitConfig()
+
+  ipcRenderer.on('local-git-folders', (e: Event, localGitFolders: Array<any>) => {
+    console.log(localGitFolders);
+    localGitRespositories.value = localGitFolders
+  })
 })
 
 const refreshGlobalGitConfig = () => {
@@ -527,10 +553,15 @@ const avatarClicked = (avatarUrl?: string) => {
 
 .account-service-title {
   display: flex;
+}
+
+.add-local-repos-title {
+  display: flex;
   margin-top: 20px;
 }
 
-.account-service {
+.account-service,
+.add-local-repos {
   display: flex;
   flex-direction: column;
   justify-content: center;
