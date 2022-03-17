@@ -77,6 +77,7 @@ function creatWindow() {
     show: false,
     transparent: true,
     webPreferences: {
+      spellcheck: false,
       webSecurity: false,
       nodeIntegration: true,
       contextIsolation: false,
@@ -108,6 +109,7 @@ function createWelcoleWindow() {
     visualEffectState: "active",
     transparent: true,
     webPreferences: {
+      spellcheck: false,
       webSecurity: false,
       nodeIntegration: true,
       contextIsolation: false,
@@ -160,6 +162,7 @@ function createAddServiceAccountWindow(type) {
     titleBarStyle: process.platform === "win32" ? "default" : "hidden",
     transparent: true,
     webPreferences: {
+      spellcheck: false,
       webSecurity: false,
       nodeIntegration: true,
       contextIsolation: false,
