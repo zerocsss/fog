@@ -71,6 +71,8 @@ const en = {
       prev_button_text: 'Back',
       next_button_text: 'Next',
       finish_button_text: "Let's Start",
+      select_all_button_text: 'Select All',
+      deselect_all_button_text: 'Deselect All',
     }
   }
 }

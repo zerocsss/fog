@@ -325,7 +325,7 @@
                 class="add-local-repos-title"
                 style="width: 89%;"
               >{{ $t('welcome.content.setting.addRepositores.add_repositores_title_label_text') }}</div>
-              <div style="margin-top: 20px; width: 455px;">
+              <div style="margin-top: 20px; width: 480px;">
                 <fog-list size="small" max-height="240">
                   <fog-list-item v-for="localGitRespository in localGitRespositories">
                     <template #actions>
@@ -356,7 +356,22 @@
         </div>
       </fog-layout-content>
       <fog-layout-footer class="welcome-footer">
-        <fog-button type="primary" size="mini" @click="prevStep" :disabled="currentStep < 2">
+        <fog-button
+          type="primary"
+          size="mini"
+          v-if="currentStep === 2 && currentSettingStep === 4"
+          @click="selectAllLocalRepos"
+        >
+          <icon-select-all />
+          {{ selectedLocalFolder.length === localGitRespositories.length ? $t("welcome.bottom.deselect_all_button_text") : $t("welcome.bottom.select_all_button_text") }}
+        </fog-button>
+        <fog-button
+          type="primary"
+          size="mini"
+          @click="prevStep"
+          :disabled="currentStep < 2"
+          :style="{ marginLeft: '20px' }"
+        >
           <icon-left />
           {{ $t("welcome.bottom.prev_button_text") }}
         </fog-button>
@@ -401,8 +416,8 @@ const store = useStore()
 const { t } = useI18n()
 const router = useRouter()
 
-const currentStep = ref(2)
-const currentSettingStep = ref(4)
+const currentStep = ref(1)
+const currentSettingStep = ref(1)
 const prevStep = () => {
   if (currentStep.value === 2) {
     if (currentSettingStep.value === 1) {
@@ -441,7 +456,7 @@ const globalName = ref("")
 const globalEmail = ref("")
 
 const localGitRespositories = ref<Array<any>>([])
-const selectedLocalFolder = ref([])
+const selectedLocalFolder = ref<Array<any>>([])
 
 const existGitBinarys = reactive<string[]>([])
 
@@ -452,6 +467,14 @@ const isNextStepDisabled = computed(() => {
     return false
   }
 })
+
+const selectAllLocalRepos = () => {
+  if (selectedLocalFolder.value.length === localGitRespositories.value.length) {
+    selectedLocalFolder.value = []
+  } else {
+    selectedLocalFolder.value = localGitRespositories.value.map(item => item)
+  }
+}
 
 onMounted(() => {
   existGitBinarys.push(searchExistGitBinary())
@@ -538,7 +561,7 @@ const avatarClicked = (avatarUrl?: string) => {
 }
 
 .account-service-list-main {
-  width: 455px;
+  width: 480px;
 }
 
 .account-service-title-bottom-button {

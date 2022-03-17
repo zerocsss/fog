@@ -33,9 +33,26 @@ const ch = {
         },
         addRepositores: {
           stepper_label_text: "添加本地仓库",
+          add_repositores_title_label_text: "选择要添加的本地仓库",
         },
         service: {
           stepper_label_text: '账户信息',
+          add_button_text: '添加',
+          cancel_button_text: '取消',
+          select_account_type_title: '选择你要添加的账户类型',
+          gitlabceee: {
+            authentication_label_text: '授权方式',
+            host_label_text: '地址',
+            host_placeholder_text: 'http://example.com',
+            username_label_text: '用户名',
+            username_placeholder_text: '请输入用户名',
+            personal_access_token_label_text: 'Personal Access Token',
+            personal_access_token_placeholder_text: 'Personal Access Token',
+            password_label_text: '密码',
+            password_placeholder_text: '请输入密码',
+            private_token_label_text: 'Private Token',
+            private_token_placeholder_text: 'Private Token',
+          }
         },
         git: {
           stepper_label_text: "Git配置",
@@ -54,6 +71,8 @@ const ch = {
       prev_button_text: '上一步',
       next_button_text: '下一步',
       finish_button_text: '完成',
+      select_all_button_text: '全选',
+      deselect_all_button_text: '全不选',
     }
   }
 }
