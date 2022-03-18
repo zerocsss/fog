@@ -42,7 +42,11 @@ export interface IServiceAccount {
   /**
    * 地址
    */
-  host: string
+  host?: string
+  /**
+   * token
+   */
+  token: string
 
   /**
    * 用户信息

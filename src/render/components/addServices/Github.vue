@@ -39,13 +39,20 @@
           class="title"
         >{{ $t('welcome.content.setting.service.gitlabceee.personal_access_token_label_text') }}</div>
       </fog-col>
-      <fog-col :span="15">
+      <fog-col :span="13">
         <fog-input
           size="mini"
           type="password"
           v-model="personalAccessToken"
           :placeholder="$t('welcome.content.setting.service.gitlabceee.personal_access_token_placeholder_text')"
         />
+      </fog-col>
+      <fog-col :span="1" :offset="1">
+        <fog-button size="mini" type="text" @click="createPAT">
+          <template #icon>
+            <icon-plus />
+          </template>
+        </fog-button>
       </fog-col>
     </fog-row>
   </div>
@@ -57,7 +64,11 @@ import gitHubAxiosInstanceFactory from "../../message/github"
 
 const authenticationType = ref(ServiceAccountAuthenticationType.PersonalAccessToken)
 const username = ref('xieyuancode')
-const personalAccessToken = ref('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')
+const personalAccessToken = ref('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')
+
+const createPAT = () => {
+  require('electron').shell.openExternal('https://github.com/settings/tokens/new')
+}
 
 const addAccount = async () => {
   const axiosInstance = gitHubAxiosInstanceFactory.getInstance(username.value, personalAccessToken.value)
@@ -66,6 +77,7 @@ const addAccount = async () => {
     require("electron").ipcRenderer.send('add-service-account-successed', {
       accountType: ServiceAccountType.Github,
       authType: ServiceAccountAuthenticationType.PersonalAccessToken,
+      token: personalAccessToken.value,
       userInfo
     })
   } catch (error) {

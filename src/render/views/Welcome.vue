@@ -284,7 +284,7 @@
               <div class="account-service-list">
                 <fog-list
                   size="small"
-                  max-height="240"
+                  max-height="180"
                   class="account-service-list-main"
                   v-if="serviceAccounts && serviceAccounts.length > 0"
                 >

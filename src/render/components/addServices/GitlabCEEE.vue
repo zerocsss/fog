@@ -53,13 +53,20 @@
           class="title"
         >{{ $t('welcome.content.setting.service.gitlabceee.personal_access_token_label_text') }}</div>
       </fog-col>
-      <fog-col :span="15">
+      <fog-col :span="13">
         <fog-input
           size="mini"
           type="password"
           v-model="personalAccessToken"
           :placeholder="$t('welcome.content.setting.service.gitlabceee.personal_access_token_placeholder_text')"
         />
+      </fog-col>
+      <fog-col :span="1" :offset="1">
+        <fog-button size="mini" type="text" @click="createPAT">
+          <template #icon>
+            <icon-plus />
+          </template>
+        </fog-button>
       </fog-col>
     </fog-row>
     <!-- Passwork -->
@@ -114,6 +121,13 @@ const personalAccessToken = ref('sVvcAH_My4gwEmVfqpuf')
 const password = ref('')
 const privateToken = ref('')
 
+const createPAT = () => {
+  if (!host.value) return
+
+  require('electron').shell.openExternal(`${host.value}/profile/personal_access_tokens`)
+
+}
+
 const addAccount = async () => {
   if (authenticationType.value === ServiceAccountAuthenticationType.PersonalAccessToken) {
     const axiosInstance = gitlabCEEEAxiosInstanceFactory.getInstance(host.value, username.value, personalAccessToken.value)
@@ -123,6 +137,7 @@ const addAccount = async () => {
         accountType: ServiceAccountType.GitlabCEEE,
         authType: ServiceAccountAuthenticationType.PersonalAccessToken,
         host: host.value,
+        token: personalAccessToken.value,
         userInfo
       })
     } catch (error) {
