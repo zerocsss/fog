@@ -74,6 +74,12 @@ const en = {
       select_all_button_text: 'Select All',
       deselect_all_button_text: 'Deselect All',
     }
+  },
+  explorer: {
+    header: {
+      radio_button_service_button_text: 'Service',
+      radio_button_local_button_text: 'Local',
+    }
   }
 }
 

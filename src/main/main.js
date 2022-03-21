@@ -127,7 +127,7 @@ function createWelcoleWindow() {
       path.join(homePath, 'Downloads'),
       path.join(homePath, 'Library'),
       path.join(homePath, '.Trash'),
-      path.join(homePath, 'Parallels'),
+      path.join(homePath, 'Parallels')
     ]).then(localGitFolders => {
       let localGitFoldersObject = []
       localGitFolders.map(localGitFolder => {

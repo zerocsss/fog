@@ -10,6 +10,8 @@ export interface IAppearanceState {
   theme: ThemeType;
   gitBinary: string;
   defaultFolder: string;
+  settingViewVisible: boolean;
+  defaultExplorerType: 'service_account' | 'local'
 }
 
 const appearance = {
@@ -19,6 +21,8 @@ const appearance = {
       gitBinary: electronStore.store.get("gitBinary"),
       defaultFolder: electronStore.store.get("defaultFolder", ipcRenderer.sendSync("get-path", { name: 'home' })),
       language: electronStore.store.get("language", "en"),
+      settingViewVisible: false,
+      defaultExplorerType: 'service_account'
     }
   },
   mutations: {
@@ -39,6 +43,13 @@ const appearance = {
       state.language = language;
       i18n.global.locale = language as 'en' | 'ch' | 'jp' | 'kor'
       electronStore.store.set("language", language);
+    },
+    switchSettingViewVisible(state: IAppearanceState, visible: boolean) {
+      state.settingViewVisible = visible
+    },
+    switchDefaultExplorerType(state: IAppearanceState, explorerType: 'service_account' | 'local') {
+      state.defaultExplorerType = explorerType
+      electronStore.store.set("defaultExplorerType", explorerType);
     }
   }
 }

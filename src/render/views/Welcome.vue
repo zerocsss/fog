@@ -326,7 +326,7 @@
                 style="width: 89%;"
               >{{ $t('welcome.content.setting.addRepositores.add_repositores_title_label_text') }}</div>
               <div style="margin-top: 20px; width: 480px;">
-                <fog-list size="small" max-height="240">
+                <fog-list size="small" max-height="240" v-if="localGitRespositories.length > 0">
                   <fog-list-item v-for="localGitRespository in localGitRespositories">
                     <template #actions>
                       <fog-checkbox v-model="selectedLocalFolder" :value="localGitRespository"></fog-checkbox>
@@ -337,6 +337,7 @@
                     ></fog-list-item-meta>
                   </fog-list-item>
                 </fog-list>
+                <fog-empty v-else />
               </div>
             </div>
           </div>
@@ -485,7 +486,6 @@ onMounted(() => {
   refreshGlobalGitConfig()
 
   ipcRenderer.on('local-git-folders', (e: Event, localGitFolders: Array<any>) => {
-    console.log(localGitFolders);
     localGitRespositories.value = localGitFolders
   })
 })
@@ -558,6 +558,8 @@ const avatarClicked = (avatarUrl?: string) => {
   align-items: center;
   border-top: 1px solid var(--color-border-2);
   padding-top: 20px;
+  overflow-y: hidden;
+  overflow-x: scroll;
 }
 
 .account-service-list-main {

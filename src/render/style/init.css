@@ -1,19 +1,29 @@
-/* * {
-  font-family: "v-mono";
-} */
 @font-face {
-  font-family: "MiSansRegular";
-  src: url('src/render/assets/font/MiSans-Regular.ttf') format('truetype');
+    font-family: "MiSansRegular";
+    src: url('src/render/assets/font/MiSans-Regular.ttf') format('truetype');
 }
 
 @font-face {
-  font-family: "MiSansNormal";
-  src: url('src/render/assets/font/MiSans-Normal.ttf') format('truetype');
+    font-family: "MiSansNormal";
+    src: url('src/render/assets/font/MiSans-Normal.ttf') format('truetype');
 }
 
 #app {
-  margin: 0;
-  padding: 0;
-  width: 100vw;
-  height: 100vh;
+    margin: 0;
+    padding: 0;
+    width: 100vw;
+    height: 100vh;
+}
+
+.arco-collapse-item-content-expend.arco-collapse-item-content {
+    background-color: unset;
+}
+
+.arco-collapse-item-content-box,
+.arco-collapse-item-content {
+    padding: 0px;
+}
+
+.arco-collapse-item-header-title {
+    user-select: none;
 }
