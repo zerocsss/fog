@@ -282,41 +282,44 @@
                 </div>
               </div>
               <div class="account-service-list">
-                <fog-list
-                  size="small"
-                  max-height="180"
-                  class="account-service-list-main"
-                  v-if="serviceAccounts && serviceAccounts.length > 0"
+                <fog-card
+                  hoverable
+                  :style="{ marginBottom: '10px', marginLeft: '10px' }"
+                  v-for="serviceAccount in serviceAccounts"
                 >
-                  <fog-list-item v-for="serviceAccount in serviceAccounts">
-                    <template #actions>
-                      <fog-button
-                        size="mini"
-                        type="text"
-                        status="danger"
-                        @click="deleteServiceAccount(serviceAccount)"
+                  <div
+                    :style="{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                    }"
+                  >
+                    <span :style="{ display: 'flex', alignItems: 'center', color: '#1D2129' }">
+                      <fog-avatar
+                        :style="{ marginRight: '8px' }"
+                        :size="28"
+                        trigger-type="mask"
+                        @click="avatarClicked(serviceAccount.userInfo.web_url)"
                       >
-                        <template #icon>
-                          <icon-delete />
+                        <img :src="serviceAccount.userInfo.avatar_url" alt="avatar" />
+                        <template #trigger-icon>
+                          <icon-share-external />
                         </template>
-                      </fog-button>
-                    </template>
-                    <fog-list-item-meta
-                      :title="serviceAccount.userInfo.name"
-                      :description="serviceAccount.accountType === ServiceAccountType.GitlabCEEE ? `GitLab CEEE: ${serviceAccount.host}` : serviceAccount.accountType"
+                      </fog-avatar>
+                      <fog-typography-text>{{ serviceAccount.userInfo.name }}</fog-typography-text>
+                    </span>
+                    <fog-button
+                      size="mini"
+                      type="text"
+                      status="danger"
+                      @click="deleteServiceAccount(serviceAccount)"
                     >
-                      <template #avatar>
-                        <fog-avatar>
-                          <img
-                            :src="serviceAccount.userInfo.avatar_url"
-                            @click="avatarClicked(serviceAccount.userInfo.web_url)"
-                          />
-                        </fog-avatar>
+                      <template #icon>
+                        <icon-delete />
                       </template>
-                    </fog-list-item-meta>
-                  </fog-list-item>
-                </fog-list>
-                <fog-empty v-else />
+                    </fog-button>
+                  </div>
+                </fog-card>
               </div>
             </div>
             <!-- 添加本地 -->
@@ -528,6 +531,9 @@ const globalEmailChanged = (e: string) => { setGlobalGitEmail(store.state.appear
 const addServiceAccount = (serviceAccountType: ServiceAccountType) => {
   const userInfo = ipcRenderer.sendSync('add-service-Account', {
     type: serviceAccountType,
+    hostUrl: "",
+    name: "",
+    pat: "",
   })
   userInfo && store.commit('addServiceAccounts', userInfo)
 }
@@ -552,14 +558,16 @@ const avatarClicked = (avatarUrl?: string) => {
 }
 
 .account-service-list {
+  width: 85%;
   margin-top: 20px;
+  max-height: 165px;
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-wrap: wrap;
   border-top: 1px solid var(--color-border-2);
   padding-top: 20px;
-  overflow-y: hidden;
-  overflow-x: scroll;
+  overflow-y: scroll;
 }
 
 .account-service-list-main {

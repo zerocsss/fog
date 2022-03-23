@@ -80,6 +80,13 @@ const en = {
       radio_button_service_button_text: 'Service',
       radio_button_local_button_text: 'Local',
     }
+  },
+  context_menu: {
+    service_account_list_item: {
+      edit: 'Edit',
+      remove: 'Remove',
+      refresh: 'Refresh',
+    }
   }
 }
 

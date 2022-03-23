@@ -1,5 +1,6 @@
 import { FogUserInfo } from "../model/user"
 import { electronStore } from "../utils/electronStore";
+import { uuid } from "../utils/uuid";
 
 /**
  * @enum 账户类型
@@ -29,6 +30,7 @@ export enum ServiceAccountAuthenticationType {
  * @interface 账户信息
  */
 export interface IServiceAccount {
+  uuid: string
   /**
    * 账户类型
    */
@@ -69,6 +71,7 @@ const serviceAccount = {
   },
   mutations: {
     addServiceAccounts(state: IServiceAccountState, serviceAccount: IServiceAccount) {
+      serviceAccount.uuid = uuid()
       state.serviceAccounts.push(serviceAccount)
       electronStore.store.set("serviceAccounts", state.serviceAccounts)
     },

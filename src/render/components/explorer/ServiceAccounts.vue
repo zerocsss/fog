@@ -1,6 +1,9 @@
 <template>
   <div class="service-account">
-    <fog-collapse :default-active-key="[ServiceAccountType.Github, ServiceAccountType.GitlabCEEE]" :bordered="false">
+    <fog-collapse
+      :default-active-key="[ServiceAccountType.Github, ServiceAccountType.GitlabCEEE]"
+      :bordered="false"
+    >
       <fog-collapse-item
         :header="ServiceAccountType.Github"
         :key="ServiceAccountType.Github"
@@ -26,7 +29,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { store } from "../../store"
 import { ServiceAccountType } from '../../store/serviceAccount';
 import ServiceAccountListItem from '../ServiceAccountListItem.vue';
@@ -34,6 +37,30 @@ import ServiceAccountListItem from '../ServiceAccountListItem.vue';
 const serviceAccounts = computed(() => store.state.serviceAccount.serviceAccounts)
 const gitHubServiceAccounts = computed(() => serviceAccounts.value.filter(account => account.accountType === ServiceAccountType.Github))
 const gitLabCeeeServiceAccounts = computed(() => serviceAccounts.value.filter(account => account.accountType === ServiceAccountType.GitlabCEEE))
+
+onMounted(() => {
+  const { ipcRenderer } = require('electron')
+
+  ipcRenderer.on('context-menu-click', (_: any, arg: string) => {
+    const [command, uuid] = arg.split('_')
+
+    switch (command) {
+      case 'service-account-list-item-edit':
+        const selectedAccount = serviceAccounts.value.find(account => account.uuid === uuid)
+        const userInfo = ipcRenderer.sendSync('add-service-Account', {
+          type: selectedAccount?.accountType,
+          hostUrl: selectedAccount?.host,
+          name: selectedAccount?.userInfo.name,
+          pat: selectedAccount?.token,
+        })
+        // userInfo && store.commit('addServiceAccounts', userInfo)
+        break;
+
+      default:
+        break;
+    }
+  })
+})
 
 </script>
 

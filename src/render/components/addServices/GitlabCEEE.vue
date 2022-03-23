@@ -114,10 +114,19 @@ import { ref } from 'vue';
 import { ServiceAccountAuthenticationType, ServiceAccountType } from "../../store/serviceAccount"
 import gitlabCEEEAxiosInstanceFactory from "../../message/GitLab"
 
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
+const { hostUrl, name, pat } = router.currentRoute.value.params
+
+console.log('hostUrl', hostUrl);
+console.log('name', name);
+console.log('pat', pat);
+
 const authenticationType = ref(ServiceAccountAuthenticationType.PersonalAccessToken)
-const host = ref('http://192.168.180.113')
-const username = ref('xieyuan')
-const personalAccessToken = ref('sVvcAH_My4gwEmVfqpuf')
+const host = ref(hostUrl || '')
+const username = ref(name || '')
+const personalAccessToken = ref(pat || '')
 const password = ref('')
 const privateToken = ref('')
 

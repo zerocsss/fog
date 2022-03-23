@@ -15,7 +15,7 @@ const routes = [
     path: '/home', component: Home
   },
   {
-    path: '/addServiceAccount/:type', component: AddServiceAccount
+    path: '/addServiceAccount/:type/:hostUrl/:name:/:pat', component: AddServiceAccount
   }
 ]
 

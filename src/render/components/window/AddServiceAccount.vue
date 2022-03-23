@@ -45,11 +45,11 @@ onMounted(() => {
   });
 });
 
-const routeParams = router.currentRoute.value.params
+const { type } = router.currentRoute.value.params
 const authenticationStatus = ref('')
 
 const component = computed(() => {
-  switch (routeParams.type) {
+  switch (type) {
     case ServiceAccountType.Github:
       return Github;
     case ServiceAccountType.Gitee:

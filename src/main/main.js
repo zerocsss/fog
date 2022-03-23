@@ -49,7 +49,8 @@ ipcMain.on("close-welcome-and-open-main", () => {
 })
 
 ipcMain.on('add-service-Account', (e, arg) => {
-  createAddServiceAccountWindow(arg.type)
+  console.log('add-service-Account', arg);
+  createAddServiceAccountWindow(arg)
   addServiceAccountWin.setAlwaysOnTop(true, 'floating')
   ipcMain.on("add-service-account-successed", (_, userInfo) => {
     e.returnValue = userInfo
@@ -147,7 +148,7 @@ function createWelcoleWindow() {
   windowsManager.addWindow(welcomeWin)
 }
 
-function createAddServiceAccountWindow(type) {
+function createAddServiceAccountWindow({ type, hostUrl, name, pat }) {
   addServiceAccountWin = new BrowserWindow({
     parent: welcomeWin,
     modal: true,
@@ -175,7 +176,7 @@ function createAddServiceAccountWindow(type) {
     addServiceAccountWin.focus()
   })
 
-  addServiceAccountWin.loadURL(encodeURI(`http://localhost:3000/#/addServiceAccount/${type}`))
+  addServiceAccountWin.loadURL(encodeURI(`http://localhost:3000/#/addServiceAccount/${type}/${hostUrl}/${name}/${pat}`))
 
   addServiceAccountWin.openDevTools()
 }
