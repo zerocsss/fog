@@ -110,25 +110,28 @@
   </div>
 </template>
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { ServiceAccountAuthenticationType, ServiceAccountType } from "../../store/serviceAccount"
 import gitlabCEEEAxiosInstanceFactory from "../../message/GitLab"
 
 import { useRouter } from 'vue-router';
+import { store } from '../../store';
 
 const router = useRouter();
-const { hostUrl, name, pat } = router.currentRoute.value.params
-
-console.log('hostUrl', hostUrl);
-console.log('name', name);
-console.log('pat', pat);
+const { uuid } = router.currentRoute.value.params
 
 const authenticationType = ref(ServiceAccountAuthenticationType.PersonalAccessToken)
-const host = ref(hostUrl || '')
-const username = ref(name || '')
-const personalAccessToken = ref(pat || '')
+const host = ref(uuid ? store.state.serviceAccount.serviceAccounts.find(x => x.uuid === uuid)?.host : '')
+const username = ref(uuid ? store.state.serviceAccount.serviceAccounts.find(x => x.uuid === uuid)?.userInfo.name : '')
+const personalAccessToken = ref(uuid ? store.state.serviceAccount.serviceAccounts.find(x => x.uuid === uuid)?.token : '')
 const password = ref('')
 const privateToken = ref('')
+
+onMounted(() => {
+  require('electron').ipcRenderer.on('host-url', (event: any, hostUrl: string) => {
+    host.value = hostUrl
+  })
+})
 
 const createPAT = () => {
   if (!host.value) return

@@ -5,9 +5,7 @@
       <fog-layout-sider style="width:280px; height: 100%;">
         <explorer-menu></explorer-menu>
       </fog-layout-sider>
-      <fog-layout-content class="fog-layout-content">
-        <setting v-if="isSettingView"></setting>
-      </fog-layout-content>
+      <fog-layout-content class="fog-layout-content"></fog-layout-content>
     </fog-layout>
   </fog-layout>
 </template>
@@ -15,16 +13,19 @@
 <script setup lang="ts">
 import { onMounted, computed } from "vue";
 import { useStore } from "../store";
-import Setting from "./Setting.vue"
+import { electronStore } from "../utils/electronStore";
+import { switchTheme } from "../utils/theme";
 import ExplorerMenu from "./ExplorerMenu.vue"
 
 const store = useStore();
-
-const isSettingView = computed(() => store.state.appearance.settingViewVisible)
+const { ipcRenderer } = require("electron")
 
 onMounted(() => {
-
-  // require('electron').ipcRenderer.on(ShortcutAction.Settings, () => store.commit('switchSettingViewVisible', !store.state.appearance.settingViewVisible))
+  // 多窗口同步
+  ipcRenderer.on("ThemeChanged", () => {
+    const theme = electronStore.store.get("theme")
+    switchTheme(theme);
+  })
 })
 
 </script>

@@ -74,6 +74,39 @@ const ch = {
       select_all_button_text: '全选',
       deselect_all_button_text: '全不选',
     }
+  },
+  setting: {
+    general: {
+      header_text: "通用",
+      default_cloned_folder_text: "默认克隆目录",
+      language_label_text: "语言",
+      language: {
+        ch: "简体中文",
+        en: "English",
+        jp: "日本語",
+        kor: "한국어",
+      },
+      open_on_login_label_text: "登陆时打开",
+    },
+    account: {
+      header_text: "账户",
+    },
+    theme: {
+      header_text: "主题",
+    },
+    shortcut: {
+      header_text: "快捷键",
+    },
+    update: {
+      header_text: "更新",
+    },
+    about: {
+      header_text: "关于",
+    },
+    common: {
+      yes_text: "是",
+      no_text: "否",
+    }
   }
 }
 

@@ -1,4 +1,4 @@
-<template>{{ $t(`view.shortcut.action.${props.action}`) }}</template>
+<template>{{ $t(`shortcut.action.${props.action}`) }}</template>
 
 <script setup lang="ts">
 import { ShortcutAction } from '../model/shortcut';

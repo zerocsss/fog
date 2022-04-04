@@ -3,6 +3,7 @@ import Home from "../views/Home.vue"
 import Welcome from "../views/Welcome.vue"
 import { electronStore } from "../utils/electronStore"
 import AddServiceAccount from "../components/window/AddServiceAccount.vue"
+import SettingView from "../views/Setting.vue"
 
 const routes = [
   {
@@ -15,7 +16,10 @@ const routes = [
     path: '/home', component: Home
   },
   {
-    path: '/addServiceAccount/:type/:hostUrl/:name:/:pat', component: AddServiceAccount
+    path: '/addServiceAccount/:type/:uuid', component: AddServiceAccount
+  },
+  {
+    path: '/settings', component: SettingView
   }
 ]
 

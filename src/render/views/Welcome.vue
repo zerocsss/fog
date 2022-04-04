@@ -211,7 +211,7 @@
                   >
                     Github
                     <template #icon>
-                      <icon-github />
+                      <github-icon/>
                     </template>
                   </fog-button>
                   <fog-button
@@ -223,7 +223,7 @@
                   >
                     Github Enterprise
                     <template #icon>
-                      <icon-github />
+                      <github-icon/>
                     </template>
                   </fog-button>
                 </div>
@@ -236,7 +236,7 @@
                   >
                     GitLab
                     <template #icon>
-                      <icon-GitLab />
+                      <gitlab-icon />
                     </template>
                   </fog-button>
                   <fog-button
@@ -247,7 +247,7 @@
                   >
                     GitLab CEEE
                     <template #icon>
-                      <icon-GitLab />
+                      <gitlab-icon />
                     </template>
                   </fog-button>
                 </div>
@@ -257,7 +257,12 @@
                     type="outline"
                     disabled
                     @click="addServiceAccount(ServiceAccountType.Gitee)"
-                  >Gitee</fog-button>
+                  >
+                    Gitee
+                    <template #icon>
+                      <gitee-icon />
+                    </template>
+                  </fog-button>
                   <fog-button
                     size="mini"
                     type="outline"
@@ -271,14 +276,24 @@
                     type="outline"
                     disabled
                     @click="addServiceAccount(ServiceAccountType.Bitbucket)"
-                  >Bitbucket</fog-button>
+                  >
+                    Bitbucket
+                    <template #icon>
+                      <bitbucket-icon />
+                    </template>
+                  </fog-button>
                   <fog-button
                     size="mini"
                     type="outline"
                     disabled
                     class="account-service-title-bottom-button"
                     @click="addServiceAccount(ServiceAccountType.BitbucketServer)"
-                  >Bitbucket Server</fog-button>
+                  >
+                    Bitbucket Server
+                    <template #icon>
+                      <bitbucket-icon />
+                    </template>
+                  </fog-button>
                 </div>
               </div>
               <div class="account-service-list">
@@ -347,14 +362,14 @@
         </div>
         <!-- 完成 -->
         <div class="finish-content" v-if="currentStep === 3">
-          <fog-result status="success" :title="$t('view.welcome.finish_page.title')">
-            <template #subtitle>{{ $t('view.welcome.finish_page.subtitle') }}</template>
+          <fog-result status="success" :title="$t('welcome.content.finish.title')">
+            <template #subtitle>{{ $t('welcome.content.finish.description') }}</template>
             <template #extra>
               <fog-button
                 type="primary"
                 size="mini"
                 @click="gotoHomePage"
-              >{{ $t('view.welcome.bottom_button.finish_button_text') }}</fog-button>
+              >{{ $t('welcome.content.finish.button_text') }}</fog-button>
             </template>
           </fog-result>
         </div>
@@ -413,6 +428,10 @@ import { useRouter } from 'vue-router';
 import { searchExistGitBinary, getGlobalGitConfig, setGlobalGitEmail, setGlobalGitName } from "../utils/git"
 import { electronStore } from '../utils/electronStore';
 import { IServiceAccount, ServiceAccountType } from '../store/serviceAccount';
+import GitlabIcon from "../components/icon/GitlabIcon.vue";
+import GiteeIcon from "../components/icon/GiteeIcon.vue";
+import BitbucketIcon from "../components/icon/BitbucketIcon.vue";
+import GithubIcon from "../components/icon/GithubIcon.vue";
 
 const { ipcRenderer, shell } = require("electron")
 
@@ -552,7 +571,7 @@ const avatarClicked = (avatarUrl?: string) => {
   user-select: none;
   height: calc(100% - 80px);
   padding: 40px;
-  background-color: var(--color-neutral-2);
+  background-color: var(--color-bg-2);
   color: var(--color-text-2);
   opacity: 0.85;
 }

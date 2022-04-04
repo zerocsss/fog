@@ -62,17 +62,14 @@ import { ref } from 'vue';
 import { ServiceAccountAuthenticationType, ServiceAccountType } from "../../store/serviceAccount"
 import gitHubAxiosInstanceFactory from "../../message/github"
 import { useRouter } from 'vue-router';
+import { store } from '../../store';
 
 const router = useRouter();
-const { hostUrl, name, pat } = router.currentRoute.value.params
-
-console.log('hostUrl', hostUrl);
-console.log('name', name);
-console.log('pat', pat);
+const { uuid } = router.currentRoute.value.params
 
 const authenticationType = ref(ServiceAccountAuthenticationType.PersonalAccessToken)
-const username = ref(name || 'xieyuancode')
-const personalAccessToken = ref(pat || '')
+const username = ref(uuid ? store.state.serviceAccount.serviceAccounts.find(item => item.uuid === uuid)?.userInfo.name : '')
+const personalAccessToken = ref(uuid ? store.state.serviceAccount.serviceAccounts.find(item => item.uuid === uuid)?.token : '')
 
 const createPAT = () => {
   require('electron').shell.openExternal('https://github.com/settings/tokens/new')

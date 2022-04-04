@@ -1,23 +1,27 @@
 <template>
   <div class="short-cut-panel">
-    <lver-spin
+    <fog-spin
       :loading="!store.state.appearance.isShortcutEnable"
       :style="{ width: '100%', cursor: !store.state.appearance.isShortcutEnable ? 'not-allowed' : 'auto' }"
-      :tip="$t('view.setting.shortcut.spin_tip')"
+      :tip="$t('setting.shortcut.spin_tip')"
     >
       <template #element>
         <icon-stop />
       </template>
-      <table class="short-cut-table" style="border-spacing: 5px; border-collapse: collapse;">
+      <table class="short-cut-table">
         <tr class="short-cut-table-header">
           <td class="short-cut-table-key">
-            <h3>{{ $t('view.setting.shortcut.action_label_text') }}</h3>
+            <h3>{{ $t('setting.shortcut.action_label_text') }}</h3>
           </td>
           <td class="short-cut-table-value">
-            <h3>{{ $t('view.setting.shortcut.key_label_text') }}</h3>
+            <h3>{{ $t('setting.shortcut.key_label_text') }}</h3>
           </td>
           <td>
-            <lver-button type="text" size="mini" @click="resetShortcut">{{ $t('view.setting.shortcut.reset_btn_text') }}</lver-button>
+            <fog-button
+              type="text"
+              size="mini"
+              @click="resetShortcut"
+            >{{ $t('setting.shortcut.reset_btn_text') }}</fog-button>
           </td>
         </tr>
         <tr
@@ -35,7 +39,7 @@
               class="edit-shortcut-input"
               @keydown="handleShortcutKeydown($event, shortcut)"
               @blur="handleShortcutBlur($event, shortcut)"
-              :placeholder="$t('view.setting.shortcut.edit_input_placeholder')"
+              :placeholder="$t('setting.shortcut.edit_input_placeholder')"
             />
             <shortcut-key
               :show-key="shortcut.action !== Action.SwitchOpendTab"
@@ -46,7 +50,7 @@
           </td>
         </tr>
       </table>
-    </lver-spin>
+    </fog-spin>
   </div>
 </template>
 
@@ -92,6 +96,10 @@ const resetShortcut = () => {
 
 .short-cut-table {
   width: 90%;
+  border-spacing: 5px;
+  border-collapse: collapse;
+  height: 400px;
+  overflow-y: scroll;
 }
 
 .short-cut-table-key {
@@ -106,7 +114,7 @@ const resetShortcut = () => {
   height: 30px;
 }
 .shortcut-field:hover {
-  background-color: var(--color-neutral-2);
+  background-color: var(--color-bg-2);
 }
 
 .edit-shortcut-input {

@@ -75,8 +75,18 @@ const serviceAccount = {
       state.serviceAccounts.push(serviceAccount)
       electronStore.store.set("serviceAccounts", state.serviceAccounts)
     },
-    deleteServiceAccount(state: IServiceAccountState, serviceAccount: IServiceAccount) {
-      state.serviceAccounts.splice(state.serviceAccounts.indexOf(serviceAccount), 1)
+    deleteServiceAccount(state: IServiceAccountState, uuid: string) {
+      const index = state.serviceAccounts.findIndex((item) => item.uuid === uuid)
+      if (index > -1) {
+        state.serviceAccounts.splice(index, 1)
+        electronStore.store.set("serviceAccounts", state.serviceAccounts)
+      }
+    },
+    updateServiceAccount(state: IServiceAccountState, serviceAccount: IServiceAccount) {
+      if (!serviceAccount.uuid) return
+      const index = state.serviceAccounts.findIndex(item => item.uuid === serviceAccount.uuid)
+      if (index === -1) return
+      state.serviceAccounts.splice(index, 1, serviceAccount)
       electronStore.store.set("serviceAccounts", state.serviceAccounts)
     }
   }

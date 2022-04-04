@@ -38,6 +38,7 @@ var tray = null
 let mainWin = null
 let welcomeWin = null
 let addServiceAccountWin = null
+let settingWindow = null
 const homePath = app.getPath('home')
 
 // 这段不知道放哪 就放着算了 懒得改了
@@ -49,7 +50,6 @@ ipcMain.on("close-welcome-and-open-main", () => {
 })
 
 ipcMain.on('add-service-Account', (e, arg) => {
-  console.log('add-service-Account', arg);
   createAddServiceAccountWindow(arg)
   addServiceAccountWin.setAlwaysOnTop(true, 'floating')
   ipcMain.on("add-service-account-successed", (_, userInfo) => {
@@ -60,6 +60,10 @@ ipcMain.on('add-service-Account', (e, arg) => {
     e.returnValue = null
     addServiceAccountWin.close()
   })
+})
+
+ipcMain.on("open-setting-view", ()=>{
+  createSettinWindow()
 })
 
 function creatWindow() {
@@ -143,12 +147,53 @@ function createWelcoleWindow() {
 
   welcomeWin.loadURL("http://localhost:3000/#/welcome")
 
-  welcomeWin.webContents.openDevTools()
-
   windowsManager.addWindow(welcomeWin)
 }
 
-function createAddServiceAccountWindow({ type, hostUrl, name, pat }) {
+function createSettinWindow() {
+  if (settingWindow !== null) {
+    settingWindow.moveTop()
+    return
+  }
+  settingWindow = new BrowserWindow({
+    width: 800,
+    height: 600,
+    title: 'Settings',
+    resizable: false,
+    movable: true,
+    icon: path.join(__dirname, '..', 'build', 'icons', 'icon.png'),
+    frame: process.platform === "win32",
+    titleBarStyle: process.platform === "win32" ? "default" : "hidden",
+    vibrancy: 'light',
+    show: false,
+    visualEffectState: "active",
+    transparent: true,
+    webPreferences: {
+      spellcheck: false,
+      webSecurity: false,
+      nodeIntegration: true,
+      contextIsolation: false,
+      devTools: true
+    }
+  })
+
+
+  settingWindow.on('ready-to-show', () => {
+    settingWindow.show()
+  })
+
+  settingWindow.on('close', ()=>{
+    settingWindow = null
+  })
+
+  settingWindow.loadURL("http://localhost:3000/#/settings")
+
+  settingWindow.webContents.openDevTools()
+
+  windowsManager.addWindow(settingWindow)
+}
+
+function createAddServiceAccountWindow({ type, uuid }) {
   addServiceAccountWin = new BrowserWindow({
     parent: welcomeWin,
     modal: true,
@@ -176,14 +221,12 @@ function createAddServiceAccountWindow({ type, hostUrl, name, pat }) {
     addServiceAccountWin.focus()
   })
 
-  addServiceAccountWin.loadURL(encodeURI(`http://localhost:3000/#/addServiceAccount/${type}/${hostUrl}/${name}/${pat}`))
-
-  addServiceAccountWin.openDevTools()
+  addServiceAccountWin.loadURL(encodeURI(`http://localhost:3000/#/addServiceAccount/${type}/${uuid}`))
 }
 
 app.whenReady().then(() => {
   tray = initTary()
-  app.setAsDefaultProtocolClient('lver', process.execPath, [`${__dirname}`])
+  app.setAsDefaultProtocolClient('fog', process.execPath, [`${__dirname}`])
   const isFirstLoad = store.get('isFirstLoad', true)
   if (isFirstLoad) {
     createWelcoleWindow()

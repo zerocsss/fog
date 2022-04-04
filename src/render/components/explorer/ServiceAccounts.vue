@@ -1,5 +1,6 @@
 <template>
   <div class="service-account">
+    <fog-empty v-if="store.state.serviceAccount.serviceAccounts.length < 1"></fog-empty>
     <fog-collapse
       :default-active-key="[ServiceAccountType.Github, ServiceAccountType.GitlabCEEE]"
       :bordered="false"
@@ -7,7 +8,7 @@
       <fog-collapse-item
         :header="ServiceAccountType.Github"
         :key="ServiceAccountType.Github"
-        v-if="gitHubServiceAccounts"
+        v-if="gitHubServiceAccounts.length > 0"
       >
         <service-account-list-item
           v-for="githubAccount in gitHubServiceAccounts"
@@ -17,7 +18,7 @@
       <fog-collapse-item
         :header="ServiceAccountType.GitlabCEEE"
         :key="ServiceAccountType.GitlabCEEE"
-        v-if="gitLabCeeeServiceAccounts"
+        v-if="gitLabCeeeServiceAccounts.length > 0"
       >
         <service-account-list-item
           v-for="gitLabCeeeAccount in gitLabCeeeServiceAccounts"
@@ -49,13 +50,13 @@ onMounted(() => {
         const selectedAccount = serviceAccounts.value.find(account => account.uuid === uuid)
         const userInfo = ipcRenderer.sendSync('add-service-Account', {
           type: selectedAccount?.accountType,
-          hostUrl: selectedAccount?.host,
-          name: selectedAccount?.userInfo.name,
-          pat: selectedAccount?.token,
+          uuid
         })
-        // userInfo && store.commit('addServiceAccounts', userInfo)
+        userInfo && (userInfo.uuid = uuid)
+        userInfo && store.commit('updateServiceAccount', userInfo)
         break;
-
+      case "service-account-list-item-remove":
+        store.commit('deleteServiceAccount', uuid)
       default:
         break;
     }

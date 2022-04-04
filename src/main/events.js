@@ -47,7 +47,20 @@ const EventName = {
      * 设置Git全局配置
      */
     SetGitGlobalConfig: "set-git-global-config",
+
+    /**
+     * 打开设置
+     */
+    OpenSettingView: "open-setting-view",
+    // 主题更新
+    ThemeChanged: "theme-changed",
 }
+ipcMain.on(EventName.ThemeChanged, () => {
+    windowsManager.getAllWindows().forEach(win => {
+        console.log(123123123);
+        win.webContents.send("ThemeChanged")
+    })
+})
 
 // 透明度改变
 ipcMain.on(EventName.OpacityChanged, (_, arg) => {

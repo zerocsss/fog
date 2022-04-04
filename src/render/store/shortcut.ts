@@ -158,7 +158,6 @@ const data = {
       }
     },
     startEditShortcut(state: IShortcutState, payload: IShortcut) {
-      console.log(123, payload);
       const index = state.shortcutList.findIndex(
         (shortcut) => shortcut.action === payload.action
       )

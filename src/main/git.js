@@ -33,9 +33,6 @@ const getGigGlobalConfig = function (binary) {
 }
 
 const setGitGlobalConfig = function (binary, key, value) {
-  console.log('binary', binary);
-  console.log('key', key);
-  console.log('value', value);
   const _ = isWin ?
     child_process.execSync(`"${binary}"` + " config --global " + key + " " + `"${value}"`).toString() :
     child_process.execSync(binary + " config --global " + key + " " + `"${value}"`).toString();

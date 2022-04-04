@@ -14,7 +14,7 @@
       v-if="props.shortcutKey?.key && showKey"
     ></key-widget>
     <key-widget
-      :keyString="$t('view.setting.shortcut.none_key_tip')"
+      :keyString="$t('setting.shortcut.none_key_tip')"
       v-if="!props.shortcutKey?.key"
     ></key-widget>
     <key-widget :style="{ marginLeft: '10px' }" :keyString="extendString" v-if="extendString"></key-widget>

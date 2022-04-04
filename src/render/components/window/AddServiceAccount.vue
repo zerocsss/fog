@@ -31,6 +31,8 @@ import GitlabCEEE from "../addServices/GitlabCEEE.vue"
 const router = useRouter();
 
 const componentRef = ref<any>(null)
+const ipcRenderer = require('electron').ipcRenderer
+const { type } = router.currentRoute.value.params
 
 onMounted(() => {
   document.addEventListener('keydown', (event) => {
@@ -38,14 +40,21 @@ onMounted(() => {
       cancel()
     }
     if (event.code === "Enter") {
-      if (componentRef.value.host && componentRef.value.username && componentRef.value.personalAccessToken) {
-        add()
+      if (type === ServiceAccountType.GitlabCEEE) {
+        if (componentRef.value.host && componentRef.value.username && componentRef.value.personalAccessToken) {
+          add()
+        }
+      } else {
+        if (componentRef.value.username && componentRef.value.personalAccessToken) {
+          add()
+        }
       }
+
     }
   });
 });
 
-const { type } = router.currentRoute.value.params
+
 const authenticationStatus = ref('')
 
 const component = computed(() => {
@@ -71,7 +80,7 @@ const add = async () => {
   }
 }
 const cancel = () => {
-  require("electron").ipcRenderer.send('add-service-account-canceled')
+  ipcRenderer.send('add-service-account-canceled')
 }
 </script>
 
@@ -85,9 +94,8 @@ const cancel = () => {
   align-items: flex-start;
   justify-content: space-between;
   user-select: none;
-  background-color: var(--color-neutral-2);
+  background-color: var(--color-bg-2);
   color: var(--color-text-2);
-  opacity: 0.85;
 }
 
 .footer {
