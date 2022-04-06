@@ -8,72 +8,127 @@
           <icon-settings />
           {{ $t("setting.general.header_text") }}
         </template>
-        <fog-form :model="{}" layout="vertical">
-          <fog-space direction="vertical" size="mini">
-            <!-- 默认储存位置 -->
-            <fog-form-item field="defaultLogFolder">
-              {{ t('setting.general.default_cloned_folder_text') }}
-              <fog-button
-                type="text"
-                size="mini"
-                :style="{ marginLeft: '10px' }"
-                @click="openLogFolderDialog"
-              >{{ store.state.appearance.defaultFolder }}</fog-button>
-            </fog-form-item>
-            <!-- 语言 -->
-            <fog-form-item field="language" :label="$t('setting.general.language_label_text')">
-              <fog-radio-group
-                type="button"
-                size="mini"
-                @change="languageChanged"
-                v-model="language"
-              >
-                <fog-radio value="ch">
-                  {{
-                    $t("setting.general.language.ch")
-                  }}
-                </fog-radio>
-                <fog-radio value="en">
-                  {{
-                    $t("setting.general.language.en")
-                  }}
-                </fog-radio>
-                <fog-radio value="jp" disabled>
-                  {{
-                    $t("setting.general.language.jp")
-                  }}
-                </fog-radio>
-                <fog-radio value="kor" disabled>
-                  {{
-                    $t("setting.general.language.kor")
-                  }}
-                </fog-radio>
-              </fog-radio-group>
-            </fog-form-item>
-            <!-- 登录时打开 -->
-            <fog-form-item
-              field="openOnLogin"
-              :label="t('setting.general.open_on_login_label_text')"
+        <fog-form :model="{}" layout="vertical" size="mini">
+          <!-- 语言 -->
+          <fog-form-item field="language">
+            {{ $t('setting.general.language_label_text') }}
+            <fog-radio-group
+              type="button"
+              size="mini"
+              @change="languageChanged"
+              v-model="language"
+              :style="{ marginLeft: '10px' }"
             >
-              <fog-radio-group
-                type="button"
-                size="mini"
-                @change="openOnLoginChanged"
-                v-model="openOnLogin"
-              >
-                <fog-radio :value="true">
-                  {{
-                    $t("setting.common.yes_text")
-                  }}
-                </fog-radio>
-                <fog-radio :value="false">
-                  {{
-                    $t("setting.common.no_text")
-                  }}
-                </fog-radio>
-              </fog-radio-group>
-            </fog-form-item>
-          </fog-space>
+              <fog-radio value="ch">
+                {{
+                  $t("setting.general.language.ch")
+                }}
+              </fog-radio>
+              <fog-radio value="en">
+                {{
+                  $t("setting.general.language.en")
+                }}
+              </fog-radio>
+              <fog-radio value="jp" disabled>
+                {{
+                  $t("setting.general.language.jp")
+                }}
+              </fog-radio>
+              <fog-radio value="kor" disabled>
+                {{
+                  $t("setting.general.language.kor")
+                }}
+              </fog-radio>
+            </fog-radio-group>
+          </fog-form-item>
+          <!-- 登录时打开 -->
+          <fog-form-item field="openOnLogin">
+            {{ t('setting.general.open_on_login_label_text') }}
+            <fog-radio-group
+              type="button"
+              size="mini"
+              @change="openOnLoginChanged"
+              v-model="openOnLogin"
+              :style="{ marginLeft: '10px' }"
+            >
+              <fog-radio :value="true">
+                {{
+                  $t("setting.common.yes_text")
+                }}
+              </fog-radio>
+              <fog-radio :value="false">
+                {{
+                  $t("setting.common.no_text")
+                }}
+              </fog-radio>
+            </fog-radio-group>
+          </fog-form-item>
+          <fog-divider></fog-divider>
+          <!-- 默认储存位置 -->
+          <fog-form-item field="defaultLogFolder">
+            {{ t('setting.general.default_cloned_folder_text') }}
+            <fog-button
+              type="text"
+              size="mini"
+              :style="{ marginLeft: '10px' }"
+              @click="openLogFolderDialog"
+            >{{ store.state.appearance.defaultFolder }}</fog-button>
+          </fog-form-item>
+          <!-- 终端应用 TODO -->
+          <fog-form-item field="TerminalApplication">
+            {{ t('setting.general.terminal_application_text') }}
+            <fog-radio-group
+              type="button"
+              size="mini"
+              v-model="terminalApplication"
+              disabled
+              :style="{ marginLeft: '10px' }"
+            >
+              <fog-radio value="Terminal">Terminal</fog-radio>
+              <fog-radio value="iTerm2">iTerm2</fog-radio>
+            </fog-radio-group>
+          </fog-form-item>
+          <fog-divider></fog-divider>
+          <!-- 自动fetch -->
+          <fog-form-item field="autoFetch">
+            {{ t('setting.general.auto_fetch_text') }}
+            <fog-radio-group
+              type="button"
+              size="mini"
+              v-model="autoFetch"
+              :style="{ marginLeft: '10px' }"
+              @change="autoFetchChanged"
+            >
+              <fog-radio :value="AutoFetch.Never">{{ t('setting.general.auto_fetch.never') }}</fog-radio>
+              <fog-radio
+                :value="AutoFetch.Evert5Minutes"
+              >{{ t('setting.general.auto_fetch.fiveMinute') }}</fog-radio>
+              <fog-radio
+                :value="AutoFetch.Evert10Minutes"
+              >{{ t('setting.general.auto_fetch.tenMinute') }}</fog-radio>
+              <fog-radio
+                :value="AutoFetch.Evert30Minutes"
+              >{{ t('setting.general.auto_fetch.thirtyMinute') }}</fog-radio>
+              <fog-radio :value="AutoFetch.EvertHour">{{ t('setting.general.auto_fetch.oneHour') }}</fog-radio>
+            </fog-radio-group>
+          </fog-form-item>
+          <fog-divider></fog-divider>
+          <!-- commit数量 -->
+          <fog-form-item field="commitCount">
+            {{ t('setting.general.commit_counts_text') }}
+            <fog-radio-group
+              type="button"
+              size="mini"
+              v-model="commitCounts"
+              :style="{ marginLeft: '10px' }"
+              @change="commitCountsChanged"
+            >
+              <fog-radio :value="100">100 {{ t('setting.general.commits_text') }}</fog-radio>
+              <fog-radio :value="200">200 {{ t('setting.general.commits_text') }}</fog-radio>
+              <fog-radio :value="500">500 {{ t('setting.general.commits_text') }}</fog-radio>
+              <fog-radio :value="1000">1000 {{ t('setting.general.commits_text') }}</fog-radio>
+            </fog-radio-group>
+          </fog-form-item>
         </fog-form>
         <fog-divider
           orientation="center"
@@ -271,6 +326,7 @@ import { useStore } from "../store";
 import { useI18n } from "vue-i18n"
 import { isLinux, isMac, isWin } from "../utils/system";
 import Shortcut from "../components/Shortcut.vue";
+import { AutoFetch } from "../model/autoFetch"
 
 const { shell, ipcRenderer, app } = require('electron');
 
@@ -285,12 +341,16 @@ const updateInterval = ref(store.state.appearance.updateInterval)
 const updateChannel = ref(store.state.appearance.updateChannel)
 const shortcutEnable = ref(store.state.appearance.isShortcutEnable)
 const openOnLogin = ref(store.state.appearance.openOnLogin)
+const autoFetch = ref(store.state.appearance.autoFetch)
+// TODO:
+const terminalApplication = ref("Terminal")
 
 const platform = isMac() ? "macOS" : isWin() ? "Windows" : isLinux() ? "Linux" : "Unknown"
 const isShortcutEnableText = computed(() => shortcutEnable.value ? t("setting.shortcut.enable_text") : t("setting.shortcut.disable_text"))
 const themeText = computed(() => theme.value === ThemeType.Dark ? t("setting.theme.themes.dark") : theme.value === ThemeType.System ? t("setting.theme.themes.system") : t("setting.theme.themes.light"))
 const languageText = computed(() => language.value === 'ch' ? t("setting.general.language.ch") : language.value === 'en' ? t("setting.general.language.en") : language.value === 'jp' ? t("setting.general.language.jp") : t("setting.general.language.kor"))
 const lastCheckUpdateTime = computed(() => store.state.appearance.lastCheckUpdateTime)
+const commitCounts = computed(() => store.state.appearance.commitCounts)
 
 const themeChanged = (e: string) => { store.commit("themeChanged", e) }
 const languageChanged = (e: string) => { store.commit("languageChanged", e) };
@@ -299,6 +359,8 @@ const updateIntervalChanged = (e: number) => { store.commit('switchUpdateInterva
 const updateChannelChanged = (e: string) => { store.commit('switchUpdateChannel', e) }
 const shortcutEnableChanged = (e: boolean) => { store.commit("switchShortcutEnable", e) }
 const openOnLoginChanged = (e: boolean) => { store.commit("switchOpenOnLogin", e) }
+const autoFetchChanged = (e: AutoFetch) => { store.commit("switchAutoFetch", e) }
+const commitCountsChanged = (e: number) => { store.commit("setCommitCounts", e) }
 
 const isCheckingUpdate = ref(false)
 

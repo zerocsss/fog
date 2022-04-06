@@ -98,7 +98,18 @@ const en = {
       header_text: "General",
       default_cloned_folder_text: "Default Cloned Folder",
       default_cloned_folder_dialog_title: "Select Default Cloned Folder",
+      terminal_application_text: "Terminal Application",
       language_label_text: "Language",
+      auto_fetch_text: "Automatically fetch",
+      commit_counts_text: "Number of commits",
+      commits_text: "Commits",
+      auto_fetch: {
+        never: "Manually",
+        fiveMinute: "5 minutes",
+        tenMinute: "10 minutes",
+        thirtyMinute: "30 minutes",
+        oneHour: "1 hour",
+      },
       language: {
         ch: "简体中文",
         en: "English",

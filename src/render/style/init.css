@@ -27,3 +27,11 @@
 .arco-collapse-item-header-title {
     user-select: none;
 }
+
+.arco-form-item {
+    margin-bottom: 3px;
+}
+
+.arco-divider-horizontal {
+    margin: 10px 0 5px 0px;
+}

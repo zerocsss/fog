@@ -3,6 +3,7 @@ import { electronStore } from "../utils/electronStore";
 import { switchTheme } from "../utils/theme";
 import i18n from "../locale";
 import { UpdateChannel, UpdateInterval } from "../model/update";
+import { AutoFetch } from "../model/autoFetch";
 
 const { ipcRenderer } = require('electron');
 
@@ -29,6 +30,10 @@ export interface IAppearanceState {
   openOnLogin: boolean
   // 最后更新时间
   lastCheckUpdateTime?: Date
+  // 自动fetch
+  autoFetch: AutoFetch
+  // commit 数量
+  commitCounts: number
 }
 
 const appearance = {
@@ -56,6 +61,9 @@ const appearance = {
       openOnLogin: electronStore.store.get("openOnLogin", true),
       // 最后更新时间
       lastCheckUpdateTime: electronStore.store.get("lastCheckUpdateTime"),
+      // 自动fetch
+      autoFetch: electronStore.store.get('autoFetch', AutoFetch.Evert30Minutes),
+      commitCounts: electronStore.store.get('commitCounts', 100),
     }
   },
   mutations: {
@@ -106,6 +114,14 @@ const appearance = {
     setLastCheckUpdateTime(state: IAppearanceState, lastCheckUpdateTime: Date) {
       state.lastCheckUpdateTime = lastCheckUpdateTime
       electronStore.store.set("lastCheckUpdateTime", lastCheckUpdateTime);
+    },
+    switchAutoFetch(state: IAppearanceState, autoFetch: AutoFetch) {
+      state.autoFetch = autoFetch
+      electronStore.store.set('autoFetch', autoFetch)
+    },
+    setCommitCounts(state: IAppearanceState, commitCounts: number) {
+      state.commitCounts = commitCounts
+      electronStore.store.set('commitCounts', commitCounts)
     }
   }
 }

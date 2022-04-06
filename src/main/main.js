@@ -6,7 +6,7 @@ const { store, initRenderer } = require("./store")
 // 菜单
 const { createAppMenu } = require('./menu')
 // 工具
-const { getAuthorName, getAppWebsite, getCredits } = require("./utils")
+const { getAuthorName, getAppWebsite, getCredits, getApps } = require("./utils")
 // touchbar
 const { touchBar } = require("./touchbar")
 // 托盘菜单
@@ -62,8 +62,8 @@ ipcMain.on('add-service-Account', (e, arg) => {
   })
 })
 
-ipcMain.on("open-setting-view", ()=>{
-  createSettinWindow()
+ipcMain.on("open-setting-view", () => {
+  settingWindow && settingWindow.show()
 })
 
 function creatWindow() {
@@ -177,18 +177,14 @@ function createSettinWindow() {
     }
   })
 
-
-  settingWindow.on('ready-to-show', () => {
-    settingWindow.show()
-  })
-
-  settingWindow.on('close', ()=>{
-    settingWindow = null
-  })
-
   settingWindow.loadURL("http://localhost:3000/#/settings")
 
   settingWindow.webContents.openDevTools()
+
+  settingWindow.on('close', e=>{
+    e.preventDefault()
+    settingWindow.hide()
+  })
 
   windowsManager.addWindow(settingWindow)
 }
@@ -237,6 +233,7 @@ app.whenReady().then(() => {
   } else {
     creatWindow()
   }
+  createSettinWindow()
   windowsManager.getMainWindow()?.setTouchBar(touchBar)
   // Menu.setApplicationMenu(createAppMenu(store.get("language", "en"), windowsManager.getMainWindow(), store.get('shortcutList', defaultShortcuts)))
 })
