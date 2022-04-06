@@ -698,7 +698,7 @@ const avatarClicked = (avatarUrl?: string) => {
 }
 
 .login-box:hover {
-  background-color: var(--color-neutral-3);
+  background-color: var(--color-bg-3);
   box-shadow: inset 0 0 5px 2px var(--color-neutral-5);
   box-shadow: 0 0 5px 2px var(--color-neutral-5);
 }

@@ -44,7 +44,7 @@ const props = defineProps<KeyProps>()
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: var(--color-neutral-3);
+  background-color: var(--color-bg-3);
   border-radius: 3px;
   margin-right: 5px;
 }

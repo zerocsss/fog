@@ -1,6 +1,7 @@
 <template>
   <div class="short-cut-panel">
     <fog-spin
+      class="short-cut-panel-loading"
       :loading="!store.state.appearance.isShortcutEnable"
       :style="{ width: '100%', cursor: !store.state.appearance.isShortcutEnable ? 'not-allowed' : 'auto' }"
       :tip="$t('setting.shortcut.spin_tip')"
@@ -98,12 +99,11 @@ const resetShortcut = () => {
   width: 90%;
   border-spacing: 5px;
   border-collapse: collapse;
-  height: 400px;
-  overflow-y: scroll;
 }
 
 .short-cut-table-key {
   width: 30%;
+  padding-left: 5px;
 }
 
 .short-cut-table-value {
@@ -114,17 +114,17 @@ const resetShortcut = () => {
   height: 30px;
 }
 .shortcut-field:hover {
-  background-color: var(--color-bg-2);
+  background-color: var(--color-bg-1);
 }
 
 .edit-shortcut-input {
   border-top: none;
   border-left: none;
   border-right: none;
-  border-bottom: 1px solid var(--color-neutral-3);
+  border-bottom: 1px solid var(--color-bg-3);
   outline: none;
   height: 20px;
-  background-color: var(--color-neutral-3);
+  background-color: var(--color-bg-3);
 }
 
 /* .edit-shortcut-input:hover {
