@@ -125,7 +125,7 @@ const addButtonClicked = (e: PointerEvent) => {
   }
 }
 
-const openSettingView = ()=>{
+const openSettingView = () => {
   console.log(123);
   ipcRenderer.send("open-setting-view")
 }
@@ -133,6 +133,7 @@ const openSettingView = ()=>{
 onMounted(() => {
   ipcRenderer.on('context-menu-click', (e: any, arg: any) => {
     let userInfo;
+    let isExist = false;
     switch (arg) {
       case "add-service-account-github":
         userInfo = ipcRenderer.sendSync('add-service-Account', {
@@ -152,7 +153,19 @@ onMounted(() => {
       default:
         break;
     }
-    userInfo && store.commit('addServiceAccounts', userInfo)
+    
+    if (userInfo) {
+    for (let index = 0; index < store.state.serviceAccount.serviceAccounts.length; index++) {
+      const serviceAccount = store.state.serviceAccount.serviceAccounts[index];
+      if (serviceAccount.host === userInfo.host && serviceAccount.accountType === userInfo.accountType && serviceAccount.userInfo.name === userInfo.userInfo.name) {
+        // TODO: 提示已存在
+        isExist = true
+        break;
+      }
+    }
+
+    !isExist && store.commit('addServiceAccounts', userInfo)
+  }
   })
 })
 </script>

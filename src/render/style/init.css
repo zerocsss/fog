@@ -30,6 +30,7 @@
 
 .arco-form-item {
     margin-bottom: 3px;
+    display: flex;
 }
 
 .arco-divider-horizontal {

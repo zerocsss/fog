@@ -34,36 +34,30 @@ export interface IAppearanceState {
   autoFetch: AutoFetch
   // commit 数量
   commitCounts: number
+  // 终端app
+  terminalApplication: string
+  // 编辑器app
+  IDEApplication: string
 }
 
 const appearance = {
   state() {
     return {
-      // 主题
       theme: electronStore.store.get("theme", ThemeType.Dark),
-      // git 二进制地址
       gitBinary: electronStore.store.get("gitBinary"),
-      // 默认clone地址
       defaultFolder: electronStore.store.get("defaultFolder", ipcRenderer.sendSync("get-path", { name: 'home' })),
-      // 语言
       language: electronStore.store.get("language", "en"),
-      // explorer 默认视图
       defaultExplorerType: electronStore.store.get("defaultExplorerType", "service_account"),
-      // 自动更新
       autoUpdate: electronStore.store.get("autoUpdate", true),
-      // 更新频率
       updateInterval: electronStore.store.get("updateInterval", UpdateInterval.Weekly),
-      // 更新渠道
       updateChannel: electronStore.store.get("updateChannel", UpdateChannel.Stable),
-      // 快捷键启动
       isShortcutEnable: electronStore.store.get("isShortcutEnable", true),
-      // 登陆打开
       openOnLogin: electronStore.store.get("openOnLogin", true),
-      // 最后更新时间
       lastCheckUpdateTime: electronStore.store.get("lastCheckUpdateTime"),
-      // 自动fetch
       autoFetch: electronStore.store.get('autoFetch', AutoFetch.Evert30Minutes),
       commitCounts: electronStore.store.get('commitCounts', 100),
+      terminalApplication: electronStore.store.get('terminalApplication', 'Terminal'),
+      IDEApplication: electronStore.store.get('IDEApplication', 'Visio Studio Code'),
     }
   },
   mutations: {
@@ -122,6 +116,14 @@ const appearance = {
     setCommitCounts(state: IAppearanceState, commitCounts: number) {
       state.commitCounts = commitCounts
       electronStore.store.set('commitCounts', commitCounts)
+    },
+    setTerminalApplication(state: IAppearanceState, terminalApplication: string) {
+      state.terminalApplication = terminalApplication
+      electronStore.store.set('terminalApplication', terminalApplication)
+    },
+    setIDEApplication(state: IAppearanceState, IDEApplication: string) {
+      state.IDEApplication = IDEApplication
+      electronStore.store.set("IDEApplication", IDEApplication);
     }
   }
 }

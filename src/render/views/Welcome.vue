@@ -211,7 +211,7 @@
                   >
                     Github
                     <template #icon>
-                      <github-icon/>
+                      <github-icon />
                     </template>
                   </fog-button>
                   <fog-button
@@ -223,7 +223,7 @@
                   >
                     Github Enterprise
                     <template #icon>
-                      <github-icon/>
+                      <github-icon />
                     </template>
                   </fog-button>
                 </div>
@@ -554,11 +554,23 @@ const addServiceAccount = (serviceAccountType: ServiceAccountType) => {
     name: "",
     pat: "",
   })
-  userInfo && store.commit('addServiceAccounts', userInfo)
+  let isExist = false;
+  if (userInfo) {
+    for (let index = 0; index < store.state.serviceAccount.serviceAccounts.length; index++) {
+      const serviceAccount = store.state.serviceAccount.serviceAccounts[index];
+      if (serviceAccount.host === userInfo.host && serviceAccount.accountType === userInfo.accountType && serviceAccount.userInfo.name === userInfo.userInfo.name) {
+        // TODO: 提示已存在
+        isExist = true
+        break;
+      }
+    }
+
+    !isExist && store.commit('addServiceAccounts', userInfo)
+  }
 }
 
 const deleteServiceAccount = (serviceAccount: IServiceAccount) => {
-  store.commit('deleteServiceAccount', serviceAccount)
+  store.commit('deleteServiceAccount', serviceAccount.uuid)
 }
 
 const avatarClicked = (avatarUrl?: string) => {

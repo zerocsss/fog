@@ -62,7 +62,7 @@
         />
       </fog-col>
       <fog-col :span="1" :offset="1">
-        <fog-button size="mini" type="text" @click="createPAT">
+        <fog-button size="mini" type="text" @click="createPAT" :disabled="!host">
           <template #icon>
             <icon-plus />
           </template>
@@ -110,6 +110,7 @@
   </div>
 </template>
 <script setup lang="ts">
+// TODO: 添加回车快捷确认 esc快捷取消
 import { ref, onMounted } from 'vue';
 import { ServiceAccountAuthenticationType, ServiceAccountType } from "../../store/serviceAccount"
 import gitlabCEEEAxiosInstanceFactory from "../../message/GitLab"
@@ -137,7 +138,6 @@ const createPAT = () => {
   if (!host.value) return
 
   require('electron').shell.openExternal(`${host.value}/profile/personal_access_tokens`)
-
 }
 
 const addAccount = async () => {

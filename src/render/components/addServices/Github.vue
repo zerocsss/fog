@@ -58,6 +58,7 @@
   </div>
 </template>
 <script setup lang="ts">
+// TODO: 添加回车快捷确认 esc快捷取消
 import { ref } from 'vue';
 import { ServiceAccountAuthenticationType, ServiceAccountType } from "../../store/serviceAccount"
 import gitHubAxiosInstanceFactory from "../../message/github"

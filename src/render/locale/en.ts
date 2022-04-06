@@ -56,9 +56,16 @@ const en = {
         },
         git: {
           stepper_label_text: "Git Config",
-          git_binary_label_text: 'Git',
+          git_binary_label_text: 'Git binary',
+          git_gpg_binary_label_text: 'GPG binary',
+          git_minimum_tip: 'Minimum required Git version is 2.1.0',
+          gpg_minimum_tip: 'Minimum required GPG version is 2.1.0',
           git_binary_placeholder_text: 'Select git binary file',
+          git_gpg_key_label_text: 'GPG key',
+          git_gpg_binary_placeholder_text: 'Select git gpg binary file',
+          git_gpg_key_placeholder_text: 'Select gpg key file',
           git_binary_button_text: 'Select manually',
+          create_gpg_key_button_text: 'Create GPG key',
           git_global_config_label_text: 'Global Config',
           git_global_name_label_text: 'User name',
           git_global_name_placeholder_text: 'Input your global user name',
@@ -99,6 +106,8 @@ const en = {
       default_cloned_folder_text: "Default Cloned Folder",
       default_cloned_folder_dialog_title: "Select Default Cloned Folder",
       terminal_application_text: "Terminal Application",
+      select_manually_button_text: "Select manually",
+      ide_application_text: "IDE Application",
       language_label_text: "Language",
       auto_fetch_text: "Automatically fetch",
       commit_counts_text: "Number of commits",
@@ -123,6 +132,8 @@ const en = {
     },
     git: {
       header_text: "Git",
+      global_user_name_text: "Global user name",
+      global_email: "Global email"
     },
     theme: {
       header_text: "Theme",
