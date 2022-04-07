@@ -11,7 +11,8 @@ const i18n = createI18n({
     en,
     jp,
     kor
-  }
+  },
+  legacy: true
 })
 
 export default i18n
