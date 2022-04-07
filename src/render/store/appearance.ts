@@ -79,6 +79,7 @@ const appearance = {
       state.language = language;
       i18n.global.locale = language as 'en' | 'ch' | 'jp' | 'kor'
       electronStore.store.set("language", language);
+      ipcRenderer.send('language-changed')
     },
     switchDefaultExplorerType(state: IAppearanceState, explorerType: 'service_account' | 'local') {
       state.defaultExplorerType = explorerType
