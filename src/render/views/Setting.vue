@@ -12,7 +12,7 @@
           <fog-form
             :model="{}"
             size="small"
-            :style="{ width: '800px' }"
+            :style="{ width: '700px' }"
             :label-col-props="{ span: 7, offset: 0 }"
             :wrapper-col-props="{ span: 14, offset: 0 }"
           >
@@ -182,7 +182,7 @@
           <fog-form
             :model="{}"
             size="small"
-            :style="{ width: '800px' }"
+            :style="{ width: '700px' }"
             :label-col-props="{ span: 7, offset: 0 }"
             :wrapper-col-props="{ span: 14, offset: 0 }"
           >
@@ -303,16 +303,20 @@
           {{ $t("setting.theme.header_text") }}
         </template>
         <div class="setting-view-content">
-          <fog-form :model="{}" layout="vertical">
-            <fog-space direction="vertical" size="mini">
-              <fog-form-item field="theme" :label="$t('setting.theme.theme_label_text')">
-                <fog-radio-group type="button" size="mini" @change="themeChanged" v-model="theme">
-                  <fog-radio value="Dark">{{ $t('setting.theme.themes.dark') }}</fog-radio>
-                  <fog-radio value="Light">{{ $t('setting.theme.themes.light') }}</fog-radio>
-                  <fog-radio value="System">{{ $t('setting.theme.themes.system') }}</fog-radio>
-                </fog-radio-group>
-              </fog-form-item>
-            </fog-space>
+          <fog-form
+            :model="{}"
+            size="small"
+            :style="{ width: '700px' }"
+            :label-col-props="{ span: 7, offset: 0 }"
+            :wrapper-col-props="{ span: 14, offset: 0 }"
+          >
+            <fog-form-item field="theme" :label="$t('setting.theme.theme_label_text')">
+              <fog-radio-group type="button" size="mini" @change="themeChanged" v-model="theme">
+                <fog-radio value="Dark">{{ $t('setting.theme.themes.dark') }}</fog-radio>
+                <fog-radio value="Light">{{ $t('setting.theme.themes.light') }}</fog-radio>
+                <fog-radio value="System">{{ $t('setting.theme.themes.system') }}</fog-radio>
+              </fog-radio-group>
+            </fog-form-item>
           </fog-form>
           <fog-divider orientation="center">{{ $t("setting.theme.header_text") }} | {{ themeText }}</fog-divider>
         </div>
@@ -324,32 +328,37 @@
           {{ $t("setting.shortcut.header_text") }}
         </template>
         <div class="setting-view-content">
-          <fog-form :model="{}" layout="vertical">
-            <fog-space direction="vertical" size="mini">
-              <fog-form-item
-                field="shorrcut_enable"
-                :label="t('setting.shortcut.shorrcut_enable_label_text')"
+          <fog-form
+            :model="{}"
+            size="small"
+            :style="{ width: '700px' }"
+            :label-col-props="{ span: 7, offset: 0 }"
+            :wrapper-col-props="{ span: 14, offset: 0 }"
+          >
+            <fog-form-item
+              field="shorrcut_enable"
+              :label="t('setting.shortcut.shorrcut_enable_label_text')"
+            >
+              <fog-radio-group
+                type="button"
+                size="mini"
+                v-model="shortcutEnable"
+                @change="shortcutEnableChanged"
               >
-                <fog-radio-group
-                  type="button"
-                  size="mini"
-                  v-model="shortcutEnable"
-                  @change="shortcutEnableChanged"
-                >
-                  <fog-radio :value="true">
-                    {{
-                      t('setting.common.enable_text')
-                    }}
-                  </fog-radio>
-                  <fog-radio :value="false">
-                    {{
-                      t('setting.common.disable_text')
-                    }}
-                  </fog-radio>
-                </fog-radio-group>
-              </fog-form-item>
-            </fog-space>
+                <fog-radio :value="true">
+                  {{
+                    t('setting.common.enable_text')
+                  }}
+                </fog-radio>
+                <fog-radio :value="false">
+                  {{
+                    t('setting.common.disable_text')
+                  }}
+                </fog-radio>
+              </fog-radio-group>
+            </fog-form-item>
           </fog-form>
+          <fog-divider></fog-divider>
           <shortcut class="shortcut-box"></shortcut>
           <fog-divider
             orientation="center"
@@ -363,57 +372,62 @@
           {{ $t("setting.update.header_text") }}
         </template>
         <div class="setting-view-content">
-          <fog-form :model="{}" layout="vertical">
-            <fog-space direction="vertical" size="mini">
-              <fog-form-item field="update">
-                <!-- {{ $t('setting.update.update_btn_text') }} -->
-                <fog-button
-                  style="margin-left: -10px;"
-                  type="text"
-                  size="small"
-                  @click="checkUpdate"
-                  :loading="isCheckingUpdate"
-                >{{ $t('setting.update.update_btn_text') }}</fog-button>
-              </fog-form-item>
-              <fog-form-item field="channel" :label="$t('setting.update.channel_label_text')">
-                <fog-radio-group
-                  type="button"
-                  size="mini"
-                  v-model="updateChannel"
-                  @change="updateChannelChanged"
-                >
-                  <fog-radio value="Stable">{{ $t('setting.update.stable_channel_text') }}</fog-radio>
-                  <fog-radio value="Beta" disabled>{{ $t('setting.update.beta_channel_text') }}</fog-radio>
-                </fog-radio-group>
-              </fog-form-item>
-              <fog-form-item field="autoCheck" :label="t('setting.update.auto_check_label_text')">
-                <fog-radio-group
-                  type="button"
-                  size="mini"
-                  v-model="isAutoCheckUpdate"
-                  @change="autoCheckUpdateChanged"
-                >
-                  <fog-radio :value="true">{{ $t('setting.common.auto_text') }}</fog-radio>
-                  <fog-radio :value="false">{{ $t('setting.common.manual_text') }}</fog-radio>
-                </fog-radio-group>
-              </fog-form-item>
-              <fog-form-item
-                field="updateInterval"
-                :label="$t('setting.update.update_interval_label_text')"
+          <fog-form
+            :model="{}"
+            size="small"
+            :style="{ width: '700px' }"
+            :label-col-props="{ span: 7, offset: 0 }"
+            :wrapper-col-props="{ span: 14, offset: 0 }"
+          >
+            <fog-form-item field="update">
+              <!-- {{ $t('setting.update.update_btn_text') }} -->
+              <fog-button
+                style="margin-left: -10px;"
+                type="text"
+                size="small"
+                @click="checkUpdate"
+                :loading="isCheckingUpdate"
+              >{{ $t('setting.update.update_btn_text') }}</fog-button>
+            </fog-form-item>
+            <fog-form-item field="channel" :label="$t('setting.update.channel_label_text')">
+              <fog-radio-group
+                type="button"
+                size="mini"
+                v-model="updateChannel"
+                @change="updateChannelChanged"
               >
-                <fog-radio-group
-                  type="button"
-                  size="mini"
-                  v-model="updateInterval"
-                  :disabled="!isAutoCheckUpdate"
-                  @change="updateIntervalChanged"
-                >
-                  <fog-radio value="Dayly">{{ $t('setting.update.dayly_text') }}</fog-radio>
-                  <fog-radio value="Weekly">{{ $t('setting.update.weekly_text') }}</fog-radio>
-                  <fog-radio value="Monthly">{{ $t('setting.update.monthly_text') }}</fog-radio>
-                </fog-radio-group>
-              </fog-form-item>
-            </fog-space>
+                <fog-radio value="Stable">{{ $t('setting.update.stable_channel_text') }}</fog-radio>
+                <fog-radio value="Beta" disabled>{{ $t('setting.update.beta_channel_text') }}</fog-radio>
+              </fog-radio-group>
+            </fog-form-item>
+            <fog-divider></fog-divider>
+            <fog-form-item field="autoCheck" :label="t('setting.update.auto_check_label_text')">
+              <fog-radio-group
+                type="button"
+                size="mini"
+                v-model="isAutoCheckUpdate"
+                @change="autoCheckUpdateChanged"
+              >
+                <fog-radio :value="true">{{ $t('setting.common.auto_text') }}</fog-radio>
+                <fog-radio :value="false">{{ $t('setting.common.manual_text') }}</fog-radio>
+              </fog-radio-group>
+            </fog-form-item>
+            <fog-form-item
+              field="updateInterval"
+              :label="$t('setting.update.update_interval_label_text')"
+            >
+              <fog-radio-group
+                type="button"
+                size="mini"
+                v-model="updateInterval"
+                :disabled="!isAutoCheckUpdate"
+                @change="updateIntervalChanged"
+              >
+                <fog-radio value="Dayly">{{ $t('setting.update.dayly_text') }}</fog-radio>
+                <fog-radio value="Weekly">{{ $t('setting.update.weekly_text') }}</fog-radio>
+                <fog-radio value="Monthly">{{ $t('setting.update.monthly_text') }}</fog-radio>
+              </fog-radio-group>
+            </fog-form-item>
           </fog-form>
           <fog-divider
             orientation="center"

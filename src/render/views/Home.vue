@@ -12,6 +12,7 @@
 
 <script setup lang="ts">
 import { onMounted, computed } from "vue";
+import i18n from "../locale";
 import { useStore } from "../store";
 import { electronStore } from "../utils/electronStore";
 import { switchTheme } from "../utils/theme";
@@ -25,6 +26,10 @@ onMounted(() => {
   ipcRenderer.on("ThemeChanged", () => {
     const theme = electronStore.store.get("theme")
     switchTheme(theme);
+  })
+  ipcRenderer.on("LanguageChanged", () => {
+    const language = electronStore.store.get("language")
+     i18n.global.locale = language as 'en' | 'ch' | 'jp' | 'kor'
   })
 })
 

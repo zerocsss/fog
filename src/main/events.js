@@ -54,11 +54,18 @@ const EventName = {
     OpenSettingView: "open-setting-view",
     // 主题更新
     ThemeChanged: "theme-changed",
+    // 语言更新
+    LanguageChanged: "language-changed",
 }
 ipcMain.on(EventName.ThemeChanged, () => {
     windowsManager.getAllWindows().forEach(win => {
-        console.log(123123123);
         win.webContents.send("ThemeChanged")
+    })
+})
+
+ipcMain.on(EventName.LanguageChanged, () => {
+    windowsManager.getAllWindows().forEach(win => {
+        win.webContents.send("LanguageChanged")
     })
 })
 

@@ -165,7 +165,7 @@ const en = {
       stable_channel_text: "Stable",
       beta_channel_text: "Beta",
       auto_check_label_text: "Auto check",
-      update_interval_label_text: "Ypdate interval",
+      update_interval_label_text: "Update interval",
       dayly_text: "Dayly",
       weekly_text: "Weekly",
       monthly_text: "Monthly",
