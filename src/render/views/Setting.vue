@@ -784,30 +784,30 @@ const resetShortcut = () => {
 .shortcut-view {
   position: relative;
   overflow: hidden;
-  height: 100%;
+  /* height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  align-items: center;
+  align-items: center; */
 }
 
 .shortcut-view-top {
-  /* position: absolute;
+  position: absolute;
   top: 0;
   left: 0;
-  z-index: 2; */
-  height: 47px;
+  z-index: 2;
+  /* height: 47px; */
   width: 100%;
   background-color: #232324;
 }
 
 .shortcut-view-bottom {
-  /* position: absolute;
+  position: absolute;
   bottom: 0;
   left: 0;
-  z-index: 3; */
+  z-index: 3;
   width: 100%;
-  height: 41px;
+  /* height: 41px; */
   background-color: #232324;
 }
 

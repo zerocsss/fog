@@ -9,7 +9,7 @@
       <template #element>
         <icon-stop />
       </template>
-      <!-- <div style="height: 47px;"></div> -->
+      <div style="height: 47px;"></div>
       <table class="short-cut-table">
         <tr class="short-cut-table-header">
           <td class="short-cut-table-key">
@@ -94,7 +94,8 @@ const resetShortcut = () => {
 <style scoped>
 .short-cut-panel {
   width: 100%;
-  height: calc(100% - 88px);
+  height: 100%;
+  /* height: calc(100% - 88px); */
   overflow-y: auto;
 }
 
